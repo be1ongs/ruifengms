@@ -183,6 +183,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 订单管理-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruifeng-order</artifactId>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -193,6 +199,8 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ruoyi-order</module>
+        <module>ruoyi-order</module>
     </modules>
     <packaging>pom</packaging>
 

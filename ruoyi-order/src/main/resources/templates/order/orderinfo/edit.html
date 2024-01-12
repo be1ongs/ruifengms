@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改采购订单')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-orderinfo-edit" th:object="${rfOrder}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购单号：</label>
+                <div class="col-sm-8">
+                    <input name="orderNum" th:field="*{orderNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品名称：</label>
+                <div class="col-sm-8">
+                    <input name="productNameCn" th:field="*{productNameCn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格型号：</label>
+                <div class="col-sm-8">
+                    <input name="productNameEn" th:field="*{productNameEn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">材质：</label>
+                <div class="col-sm-8">
+                    <input name="material" th:field="*{material}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位：</label>
+                <div class="col-sm-8">
+                    <input name="unit" th:field="*{unit}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单价：</label>
+                <div class="col-sm-8">
+                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交货日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="needTime" th:value="${#dates.format(rfOrder.needTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">已交：</label>
+                <div class="col-sm-8">
+                    <input name="paidNum" th:field="*{paidNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">未交：</label>
+                <div class="col-sm-8">
+                    <input name="unpaidNum" th:field="*{unpaidNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">请购：</label>
+                <div class="col-sm-8">
+                    <input name="orderFrom" th:field="*{orderFrom}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input name="orderStatusDesc" th:field="*{orderStatusDesc}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="sendTime1" th:value="${#dates.format(rfOrder.sendTime1, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货数量：</label>
+                <div class="col-sm-8">
+                    <input name="sendAmount1" th:field="*{sendAmount1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货日期2：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="sendTime2" th:value="${#dates.format(rfOrder.sendTime2, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货数量2：</label>
+                <div class="col-sm-8">
+                    <input name="sendAmount2" th:field="*{sendAmount2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货日期3：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="sendTime3" th:value="${#dates.format(rfOrder.sendTime3, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发货日期3：</label>
+                <div class="col-sm-8">
+                    <input name="sendAmount3" th:field="*{sendAmount3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input name="sendInfo" th:field="*{sendInfo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "order/orderinfo";
+        $("#form-orderinfo-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
+            }
+        }
+
+        $("input[name='needTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='sendTime1']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='sendTime2']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='sendTime3']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

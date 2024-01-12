@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('采购订单列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>采购单号：</label>
+                                <input type="text" name="orderNum"/>
+                            </li>
+                            <li>
+                                <label>产品名称：</label>
+                                <input type="text" name="productNameCn"/>
+                            </li>
+                            <li>
+                                <label>规格型号：</label>
+                                <input type="text" name="productNameEn"/>
+                            </li>
+                            <li>
+                                <label>材质：</label>
+                                <input type="text" name="material"/>
+                            </li>
+                            <li class="select-time">
+                                <label>交货日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginNeedTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endNeedTime]"/>
+                            </li>
+                            <li>
+                                <label>请购：</label>
+                                <input type="text" name="orderFrom"/>
+                            </li>
+                            <li class="select-time">
+                                <label>发货日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSendTime1]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSendTime1]"/>
+                            </li>
+                            <li>
+                                <label>发货数量：</label>
+                                <input type="text" name="sendAmount1"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="order:orderinfo:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="order:orderinfo:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="order:orderinfo:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="order:orderinfo:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('order:orderinfo:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('order:orderinfo:remove')}]];
+        var prefix = ctx + "order/orderinfo";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "采购订单",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'orderNum',
+                    title: '采购单号'
+                },
+                {
+                    field: 'productNameCn',
+                    title: '产品名称'
+                },
+                {
+                    field: 'productNameEn',
+                    title: '规格型号'
+                },
+                {
+                    field: 'material',
+                    title: '材质'
+                },
+                {
+                    field: 'amount',
+                    title: '数量'
+                },
+                {
+                    field: 'unit',
+                    title: '单位'
+                },
+                {
+                    field: 'price',
+                    title: '单价'
+                },
+                {
+                    field: 'needTime',
+                    title: '交货日期'
+                },
+                {
+                    field: 'paidNum',
+                    title: '已交'
+                },
+                {
+                    field: 'unpaidNum',
+                    title: '未交'
+                },
+                {
+                    field: 'orderFrom',
+                    title: '请购'
+                },
+                {
+                    field: 'orderStatus',
+                    title: '订单状态'
+                },
+                {
+                    field: 'orderStatusDesc',
+                    title: ''
+                },
+                {
+                    field: 'sendTime1',
+                    title: '发货日期'
+                },
+                {
+                    field: 'sendAmount1',
+                    title: '发货数量'
+                },
+                {
+                    field: 'sendInfo',
+                    title: ''
+                },
+                {
+                    field: 'remark',
+                    title: ''
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

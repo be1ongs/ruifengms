@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.RfOrderMapper">
+    
+    <resultMap type="RfOrder" id="RfOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="productNameCn"    column="product_name_cn"    />
+        <result property="productNameEn"    column="product_name_en"    />
+        <result property="material"    column="material"    />
+        <result property="amount"    column="amount"    />
+        <result property="unit"    column="unit"    />
+        <result property="price"    column="price"    />
+        <result property="needTime"    column="need_time"    />
+        <result property="paidNum"    column="paid_num"    />
+        <result property="unpaidNum"    column="unpaid_num"    />
+        <result property="orderFrom"    column="order_from"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="orderStatusDesc"    column="order_status_desc"    />
+        <result property="sendTime1"    column="send_time1"    />
+        <result property="sendAmount1"    column="send_amount1"    />
+        <result property="sendTime2"    column="send_time2"    />
+        <result property="sendAmount2"    column="send_amount2"    />
+        <result property="sendTime3"    column="send_time3"    />
+        <result property="sendAmount3"    column="send_amount3"    />
+        <result property="sendInfo"    column="send_info"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectRfOrderVo">
+        select id, order_num, product_name_cn, product_name_en, material, amount, unit, price, need_time, paid_num, unpaid_num, order_from, order_status, order_status_desc, send_time1, send_amount1, send_time2, send_amount2, send_time3, send_amount3, send_info, remark, del_flag, create_by, create_time, update_by, update_time from rf_order
+    </sql>
+
+    <select id="selectRfOrderList" parameterType="RfOrder" resultMap="RfOrderResult">
+        <include refid="selectRfOrderVo"/>
+        <where>  
+            <if test="orderNum != null  and orderNum != ''"> and order_num like concat('%', #{orderNum}, '%')</if>
+            <if test="productNameCn != null  and productNameCn != ''"> and product_name_cn like concat('%', #{productNameCn}, '%')</if>
+            <if test="productNameEn != null  and productNameEn != ''"> and product_name_en like concat('%', #{productNameEn}, '%')</if>
+            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
+            <if test="params.beginNeedTime != null and params.beginNeedTime != '' and params.endNeedTime != null and params.endNeedTime != ''"> and need_time between #{params.beginNeedTime} and #{params.endNeedTime}</if>
+            <if test="orderFrom != null  and orderFrom != ''"> and order_from like concat('%', #{orderFrom}, '%')</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="params.beginSendTime1 != null and params.beginSendTime1 != '' and params.endSendTime1 != null and params.endSendTime1 != ''"> and send_time1 between #{params.beginSendTime1} and #{params.endSendTime1}</if>
+            <if test="sendAmount1 != null "> and send_amount1 = #{sendAmount1}</if>
+        </where>
+    </select>
+    
+    <select id="selectRfOrderById" parameterType="Long" resultMap="RfOrderResult">
+        <include refid="selectRfOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRfOrder" parameterType="RfOrder">
+        insert into rf_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="productNameCn != null">product_name_cn,</if>
+            <if test="productNameEn != null">product_name_en,</if>
+            <if test="material != null">material,</if>
+            <if test="amount != null">amount,</if>
+            <if test="unit != null">unit,</if>
+            <if test="price != null">price,</if>
+            <if test="needTime != null">need_time,</if>
+            <if test="paidNum != null">paid_num,</if>
+            <if test="unpaidNum != null">unpaid_num,</if>
+            <if test="orderFrom != null">order_from,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="orderStatusDesc != null">order_status_desc,</if>
+            <if test="sendTime1 != null">send_time1,</if>
+            <if test="sendAmount1 != null">send_amount1,</if>
+            <if test="sendTime2 != null">send_time2,</if>
+            <if test="sendAmount2 != null">send_amount2,</if>
+            <if test="sendTime3 != null">send_time3,</if>
+            <if test="sendAmount3 != null">send_amount3,</if>
+            <if test="sendInfo != null">send_info,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="productNameCn != null">#{productNameCn},</if>
+            <if test="productNameEn != null">#{productNameEn},</if>
+            <if test="material != null">#{material},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="price != null">#{price},</if>
+            <if test="needTime != null">#{needTime},</if>
+            <if test="paidNum != null">#{paidNum},</if>
+            <if test="unpaidNum != null">#{unpaidNum},</if>
+            <if test="orderFrom != null">#{orderFrom},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="orderStatusDesc != null">#{orderStatusDesc},</if>
+            <if test="sendTime1 != null">#{sendTime1},</if>
+            <if test="sendAmount1 != null">#{sendAmount1},</if>
+            <if test="sendTime2 != null">#{sendTime2},</if>
+            <if test="sendAmount2 != null">#{sendAmount2},</if>
+            <if test="sendTime3 != null">#{sendTime3},</if>
+            <if test="sendAmount3 != null">#{sendAmount3},</if>
+            <if test="sendInfo != null">#{sendInfo},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRfOrder" parameterType="RfOrder">
+        update rf_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="productNameCn != null">product_name_cn = #{productNameCn},</if>
+            <if test="productNameEn != null">product_name_en = #{productNameEn},</if>
+            <if test="material != null">material = #{material},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="needTime != null">need_time = #{needTime},</if>
+            <if test="paidNum != null">paid_num = #{paidNum},</if>
+            <if test="unpaidNum != null">unpaid_num = #{unpaidNum},</if>
+            <if test="orderFrom != null">order_from = #{orderFrom},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="orderStatusDesc != null">order_status_desc = #{orderStatusDesc},</if>
+            <if test="sendTime1 != null">send_time1 = #{sendTime1},</if>
+            <if test="sendAmount1 != null">send_amount1 = #{sendAmount1},</if>
+            <if test="sendTime2 != null">send_time2 = #{sendTime2},</if>
+            <if test="sendAmount2 != null">send_amount2 = #{sendAmount2},</if>
+            <if test="sendTime3 != null">send_time3 = #{sendTime3},</if>
+            <if test="sendAmount3 != null">send_amount3 = #{sendAmount3},</if>
+            <if test="sendInfo != null">send_info = #{sendInfo},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRfOrderById" parameterType="Long">
+        delete from rf_order where id = #{id}
+    </delete>
+
+    <delete id="deleteRfOrderByIds" parameterType="String">
+        delete from rf_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

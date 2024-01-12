@@ -67,6 +67,13 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 订单管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-order</artifactId>
+            <version>4.7.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>

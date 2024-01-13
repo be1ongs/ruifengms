@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 采购订单对象 rf_order
  * 
  * @author pg
- * @date 2024-01-11
+ * @date 2024-01-13
  */
 public class RfOrder extends BaseEntity
 {
@@ -19,6 +19,16 @@ public class RfOrder extends BaseEntity
 
     /** 主键id */
     private Long id;
+
+    /** 客户Id */
+    private String purchaseId;
+
+    /** 客户名称 */
+    @Excel(name = "客户名称")
+    private String purchaseName;
+
+    /** 客户代号 */
+    private String purchaseCode;
 
     /** 采购单号 */
     @Excel(name = "采购单号")
@@ -65,21 +75,20 @@ public class RfOrder extends BaseEntity
     @Excel(name = "请购")
     private String orderFrom;
 
-    /** 订单状态 */
-    @Excel(name = "订单状态")
-    private Integer orderStatus;
+    /** 状态 */
+    @Excel(name = "状态")
+    private String orderStatus;
 
-    /**  */
-    @Excel(name = "")
+    /** 状态 */
     private String orderStatusDesc;
 
-    /** 发货日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "发货日期", width = 30, dateFormat = "yyyy-MM-dd")
+    /** 图纸地址 */
+    private String productPic;
+
+    /** 发货日期1 */
     private Date sendTime1;
 
-    /** 发货数量 */
-    @Excel(name = "发货数量")
+    /** 发货数量1 */
     private Integer sendAmount1;
 
     /** 发货日期2 */
@@ -109,6 +118,33 @@ public class RfOrder extends BaseEntity
     public Long getId() 
     {
         return id;
+    }
+    public void setPurchaseId(String purchaseId) 
+    {
+        this.purchaseId = purchaseId;
+    }
+
+    public String getPurchaseId() 
+    {
+        return purchaseId;
+    }
+    public void setPurchaseName(String purchaseName) 
+    {
+        this.purchaseName = purchaseName;
+    }
+
+    public String getPurchaseName() 
+    {
+        return purchaseName;
+    }
+    public void setPurchaseCode(String purchaseCode) 
+    {
+        this.purchaseCode = purchaseCode;
+    }
+
+    public String getPurchaseCode() 
+    {
+        return purchaseCode;
     }
     public void setOrderNum(String orderNum) 
     {
@@ -209,12 +245,12 @@ public class RfOrder extends BaseEntity
     {
         return orderFrom;
     }
-    public void setOrderStatus(Integer orderStatus) 
+    public void setOrderStatus(String orderStatus) 
     {
         this.orderStatus = orderStatus;
     }
 
-    public Integer getOrderStatus() 
+    public String getOrderStatus() 
     {
         return orderStatus;
     }
@@ -226,6 +262,15 @@ public class RfOrder extends BaseEntity
     public String getOrderStatusDesc() 
     {
         return orderStatusDesc;
+    }
+    public void setProductPic(String productPic) 
+    {
+        this.productPic = productPic;
+    }
+
+    public String getProductPic() 
+    {
+        return productPic;
     }
     public void setSendTime1(Date sendTime1) 
     {
@@ -304,6 +349,9 @@ public class RfOrder extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
+            .append("purchaseId", getPurchaseId())
+            .append("purchaseName", getPurchaseName())
+            .append("purchaseCode", getPurchaseCode())
             .append("orderNum", getOrderNum())
             .append("productNameCn", getProductNameCn())
             .append("productNameEn", getProductNameEn())
@@ -317,6 +365,7 @@ public class RfOrder extends BaseEntity
             .append("orderFrom", getOrderFrom())
             .append("orderStatus", getOrderStatus())
             .append("orderStatusDesc", getOrderStatusDesc())
+            .append("productPic", getProductPic())
             .append("sendTime1", getSendTime1())
             .append("sendAmount1", getSendAmount1())
             .append("sendTime2", getSendTime2())

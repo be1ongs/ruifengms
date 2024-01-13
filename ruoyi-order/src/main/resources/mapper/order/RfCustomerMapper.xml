@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.RfCustomerMapper">
+    
+    <resultMap type="RfCustomer" id="RfCustomerResult">
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerCode"    column="customer_code"    />
+        <result property="shippingAddress"    column="shipping_address"    />
+        <result property="purchaseFrom"    column="purchase_from"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRfCustomerVo">
+        select customer_id, customer_name, customer_code, shipping_address, purchase_from, status, del_flag, create_by, create_time, update_by, update_time, remark from rf_customer
+    </sql>
+
+    <select id="selectRfCustomerList" parameterType="RfCustomer" resultMap="RfCustomerResult">
+        <include refid="selectRfCustomerVo"/>
+        <where>  
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerCode != null  and customerCode != ''"> and customer_code = #{customerCode}</if>
+            <if test="shippingAddress != null  and shippingAddress != ''"> and shipping_address = #{shippingAddress}</if>
+            <if test="purchaseFrom != null  and purchaseFrom != ''"> and purchase_from = #{purchaseFrom}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectRfCustomerByCustomerId" parameterType="Long" resultMap="RfCustomerResult">
+        <include refid="selectRfCustomerVo"/>
+        where customer_id = #{customerId}
+    </select>
+        
+    <insert id="insertRfCustomer" parameterType="RfCustomer" useGeneratedKeys="true" keyProperty="customerId">
+        insert into rf_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">customer_name,</if>
+            <if test="customerCode != null">customer_code,</if>
+            <if test="shippingAddress != null">shipping_address,</if>
+            <if test="purchaseFrom != null">purchase_from,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">#{customerName},</if>
+            <if test="customerCode != null">#{customerCode},</if>
+            <if test="shippingAddress != null">#{shippingAddress},</if>
+            <if test="purchaseFrom != null">#{purchaseFrom},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRfCustomer" parameterType="RfCustomer">
+        update rf_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="customerCode != null">customer_code = #{customerCode},</if>
+            <if test="shippingAddress != null">shipping_address = #{shippingAddress},</if>
+            <if test="purchaseFrom != null">purchase_from = #{purchaseFrom},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where customer_id = #{customerId}
+    </update>
+
+    <delete id="deleteRfCustomerByCustomerId" parameterType="Long">
+        delete from rf_customer where customer_id = #{customerId}
+    </delete>
+
+    <delete id="deleteRfCustomerByCustomerIds" parameterType="String">
+        delete from rf_customer where customer_id in 
+        <foreach item="customerId" collection="array" open="(" separator="," close=")">
+            #{customerId}
+        </foreach>
+    </delete>
+
+</mapper>

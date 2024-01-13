@@ -1,225 +1,276 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增采购订单')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('新增采购订单')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-orderinfo-add">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">客户名称测试：</label>
-                <div class="col-sm-8">
-                    <select name="purchaseId" class="form-control m-b" th:with="type=${@dict.getType('ord_status')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-orderinfo-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户名称测试：</label>
+            <div class="col-sm-8">
+                <select name="purchaseId" class="form-control m-b" th:with="type=${@customer.list()}">
+                    <option th:each="dict : ${type}" th:text="${dict.customerName}"
+                            th:value="${dict.customerId}"
+                            th:data-customer-name="${dict.customerName}"
+                            th:data-customer-code="${dict.customerCode}"> >
+                    </option>
+                </select>
             </div>
+        </div>
 
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">客户Id：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="purchaseId" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">客户名称：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="purchaseName" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">客户代号：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="purchaseCode" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">采购单号：</label>
-                <div class="col-sm-8">
-                    <input name="orderNum" class="form-control" type="text">
-                </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">客户Id：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="purchaseId" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">客户名称：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="purchaseName" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">客户代号：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="purchaseCode" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">采购单号：</label>
+            <div class="col-sm-8">
+                <input name="orderNum" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品名称：</label>
-                <div class="col-sm-8">
-                    <input name="productNameCn" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">产品名称：</label>
+            <div class="col-sm-8">
+                <input name="productNameCn" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">规格型号：</label>
-                <div class="col-sm-8">
-                    <input name="productNameEn" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">规格型号：</label>
+            <div class="col-sm-8">
+                <input name="productNameEn" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">材质：</label>
-                <div class="col-sm-8">
-                    <input name="material" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">材质：</label>
+            <div class="col-sm-8">
+                <input name="material" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">数量：</label>
-                <div class="col-sm-8">
-                    <input name="amount" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">数量：</label>
+            <div class="col-sm-8">
+                <input name="amount" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">单位：</label>
-                <div class="col-sm-8">
-                    <input name="unit" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">单价：</label>
-                <div class="col-sm-8">
-                    <input name="price" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">交货日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="needTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">已交：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="paidNum" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">未交：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="unpaidNum" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">请购：</label>
-                <div class="col-sm-8">
-                    <input name="orderFrom" class="form-control" type="text">
-                </div>
-            </div>
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">状态：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <div class="radio-box" th:each="dict : ${@dict.getType('ord_status')}">-->
-<!--                        <input type="radio" th:id="${'orderStatus_' + dict.dictCode}" name="orderStatus" th:value="${dict.dictValue}" th:checked="${dict.default}">-->
-<!--                        <label th:for="${'orderStatus_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">上传图纸</label>
-                <div class="col-sm-8">
-                    <input name="productPic" class="form-control" type="text">
-                </div>
-            </div>
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">发货日期1：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <div class="input-group date">-->
-<!--                        <input name="sendTime1" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
-<!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">发货数量1：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="sendAmount1" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">发货日期2：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <div class="input-group date">-->
-<!--                        <input name="sendTime2" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
-<!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--                <label class="col-sm-3 control-label">发货数量2：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="sendAmount2" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">发货日期3：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <div class="input-group date">-->
-<!--                        <input name="sendTime3" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
-<!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">发货日期3：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="sendAmount3" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="sendInfo" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="remark" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group">    -->
-<!--                <label class="col-sm-3 control-label">删除标志：</label>-->
-<!--                <div class="col-sm-8">-->
-<!--                    <input name="delFlag" class="form-control" type="text">-->
-<!--                </div>-->
-<!--            </div>-->
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script th:inline="javascript">
-        var prefix = ctx + "order/orderinfo"
-        $("#form-orderinfo-add").validate({
-            focusCleanup: true
-        });
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">单位：</label>
+            <div class="col-sm-8">
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-orderinfo-add').serialize());
-            }
+                <select name="unit" class="form-control m-b">
+                    <option>件</option>
+                    <option>套</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">单价：</label>
+            <div class="col-sm-8">
+                <input name="price" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">交货日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="needTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">已交：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="paidNum" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">未交：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="unpaidNum" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">请购：</label>
+            <div class="col-sm-8">
+                <input name="orderFrom" class="form-control" type="text">
+            </div>
+        </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">状态：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <div class="radio-box" th:each="dict : ${@dict.getType('ord_status')}">-->
+        <!--                        <input type="radio" th:id="${'orderStatus_' + dict.dictCode}" name="orderStatus" th:value="${dict.dictValue}" th:checked="${dict.default}">-->
+        <!--                        <label th:for="${'orderStatus_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">上传图纸</label>
+            <!--<div class="col-sm-8">-->
+                <!--<input name="productPic" class="form-control" type="text">-->
+            <!--</div>-->
+            <!-- 添加隐藏的输入字段来存储文件路径 -->
+            <input type="hidden" name="productPic" />
+            <div class="col-sm-8">
+                <label class="font-noraml">多文件上传</label>
+                <div class="file-loading">
+                    <input id="multipleFile" name="files" type="file" multiple>
+                </div>
+            </div>
+        </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">发货日期1：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <div class="input-group date">-->
+        <!--                        <input name="sendTime1" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
+        <!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">发货数量1：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="sendAmount1" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">发货日期2：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <div class="input-group date">-->
+        <!--                        <input name="sendTime2" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
+        <!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">-->
+        <!--                <label class="col-sm-3 control-label">发货数量2：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="sendAmount2" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">发货日期3：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <div class="input-group date">-->
+        <!--                        <input name="sendTime3" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
+        <!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">发货日期3：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="sendAmount3" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="sendInfo" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="remark" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">删除标志：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="delFlag" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "order/orderinfo"
+    $("#form-orderinfo-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var selectedOption = document.querySelector('select[name="purchaseId"] option:checked');
+            var customerName = selectedOption.getAttribute('data-customer-name');
+            var customerCode = selectedOption.getAttribute('data-customer-code');
+
+            // 创建一个新的表单数据对象，包含表单字段和从选项中获取的额外数据
+            var formData = $('#form-orderinfo-add').serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+
+            // 添加额外的数据到表单数据对象中
+            formData['purchaseName'] = customerName;
+            formData['purchaseCode'] = customerCode;
+            $.operate.save(prefix + "/add", formData);
         }
+    }
 
-        $("input[name='needTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='needTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime1']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='sendTime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime2']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='sendTime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime3']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    $("input[name='sendTime3']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $(document).ready(function () {
+
+        // 多图上传
+        $("#multipleFile").fileinput({
+            uploadUrl: ctx + 'common/uploads',
+            uploadAsync: false
+        }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
+            var rsp = data.response;
+            log.info("return urls：" + rsp.urls)
+            var productPic = document.getElementsByName("productPic");
+            productPic.value = rsp.urls; // 将文件路径赋值给隐藏字段
+            log.info("reutrn fileNames：" + rsp.fileNames)
+            log.info("reutrn newFileNames：" + rsp.newFileNames)
+            log.info("return originalFilenames：" + rsp.originalFilenames)
+        }).on('fileremoved', function (event, id, index) {
+            $("input[name='" + event.currentTarget.id + "']").val('')
+        })
+    });
+</script>
 </body>
 </html>

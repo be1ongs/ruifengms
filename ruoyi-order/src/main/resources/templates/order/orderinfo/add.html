@@ -128,7 +128,7 @@
                 <!--<input name="productPic" class="form-control" type="text">-->
             <!--</div>-->
             <!-- 添加隐藏的输入字段来存储文件路径 -->
-            <input type="hidden" name="productPic" />
+            <input type="hidden" id="productPic" name="productPic"/>
             <div class="col-sm-8">
                 <label class="font-noraml">多文件上传</label>
                 <div class="file-loading">
@@ -212,6 +212,9 @@
 
     function submitHandler() {
         if ($.validate.form()) {
+            var productPic = document.getElementById("productPic");
+
+            alert(productPic.value);
             var selectedOption = document.querySelector('select[name="purchaseId"] option:checked');
             var customerName = selectedOption.getAttribute('data-customer-name');
             var customerCode = selectedOption.getAttribute('data-customer-code');
@@ -262,7 +265,7 @@
         }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
             var rsp = data.response;
             log.info("return urls：" + rsp.urls)
-            var productPic = document.getElementsByName("productPic");
+            var productPic = document.getElementById("productPic");
             productPic.value = rsp.urls; // 将文件路径赋值给隐藏字段
             log.info("reutrn fileNames：" + rsp.fileNames)
             log.info("reutrn newFileNames：" + rsp.newFileNames)

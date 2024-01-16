@@ -2,6 +2,8 @@ package com.ruoyi.order.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.order.constants.StatusConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.RfOrderMapper;
@@ -54,7 +56,13 @@ public class RfOrderServiceImpl implements IRfOrderService
     @Override
     public int insertRfOrder(RfOrder rfOrder)
     {
+
         rfOrder.setCreateTime(DateUtils.getNowDate());
+        rfOrder.setCreateBy(ShiroUtils.getLoginName());
+        rfOrder.setPaidNum(0);
+        rfOrder.setUnpaidNum(rfOrder.getAmount());
+        rfOrder.setOrderStatus(StatusConstants.NOT_FINISH);
+        rfOrder.setOrderStatusDesc(StatusConstants.StatusType.getValueBykey(StatusConstants.NOT_FINISH));
         return rfOrderMapper.insertRfOrder(rfOrder);
     }
 

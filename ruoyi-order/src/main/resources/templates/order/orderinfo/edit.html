@@ -7,25 +7,22 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-orderinfo-edit" th:object="${rfOrder}">
-            <input name="id" th:field="*{id}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户Id：</label>
-                <div class="col-sm-8">
-                    <input name="purchaseId" th:field="*{purchaseId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">客户名称：</label>
                 <div class="col-sm-8">
-                    <input name="purchaseName" th:field="*{purchaseName}" class="form-control" type="text">
+                    <select name="purchaseId" class="form-control m-b" th:with="type=${@customer.list()}">
+                        <option th:each="dict : ${type}" th:text="${dict.customerName}"
+                                th:value="${dict.customerId}"
+                                th:data-customer-name="${dict.customerName}"
+                                th:data-customer-code="${dict.customerCode}" th:selected="${dict.customerId} eq *{purchaseId}">
+                        </option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户代号：</label>
-                <div class="col-sm-8">
-                    <input name="purchaseCode" th:field="*{purchaseCode}" class="form-control" type="text">
-                </div>
-            </div>
+
+            <input name="id" th:field="*{id}" type="hidden">
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">采购单号：</label>
                 <div class="col-sm-8">
@@ -56,10 +53,16 @@
                     <input name="amount" th:field="*{amount}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">单位：</label>
                 <div class="col-sm-8">
-                    <input name="unit" th:field="*{unit}" class="form-control" type="text">
+
+                    <select name="unit" class="form-control m-b">
+                        <option th:selected="'件' eq *{unit}">件</option>
+                        <option th:selected="'套' eq *{unit}">套</option>
+                    </select>
+
                 </div>
             </div>
             <div class="form-group">    
@@ -77,33 +80,15 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">已交：</label>
-                <div class="col-sm-8">
-                    <input name="paidNum" th:field="*{paidNum}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">未交：</label>
-                <div class="col-sm-8">
-                    <input name="unpaidNum" th:field="*{unpaidNum}" class="form-control" type="text">
-                </div>
-            </div>
+
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">请购：</label>
                 <div class="col-sm-8">
                     <input name="orderFrom" th:field="*{orderFrom}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box" th:each="dict : ${@dict.getType('ord_status')}">
-                        <input type="radio" th:id="${'orderStatus_' + dict.dictCode}" name="orderStatus" th:value="${dict.dictValue}" th:field="*{orderStatus}">
-                        <label th:for="${'orderStatus_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
-                    </div>
-                </div>
-            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">图纸地址：</label>
                 <div class="col-sm-8">
@@ -179,7 +164,21 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
+                var selectedOption = document.querySelector('select[name="purchaseId"] option:checked');
+                var customerName = selectedOption.getAttribute('data-customer-name');
+                var customerCode = selectedOption.getAttribute('data-customer-code');
+
+                // 创建一个新的表单数据对象，包含表单字段和从选项中获取的额外数据
+                var formData = $('#form-orderinfo-edit').serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+
+                // 添加额外的数据到表单数据对象中
+                formData['purchaseName'] = customerName;
+                formData['purchaseCode'] = customerCode;
+                $.operate.save(prefix + "/edit", formData);
+                //$.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
             }
         }
 

@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.order.mapper.RfOrderMapper">
-    
+
     <resultMap type="RfOrder" id="RfOrderResult">
         <result property="id"    column="id"    />
         <result property="purchaseId"    column="purchase_id"    />
         <result property="purchaseName"    column="purchase_name"    />
         <result property="purchaseCode"    column="purchase_code"    />
-        <result property="orderNum"    column="order_num"    />
-        <result property="productNameCn"    column="product_name_cn"    />
-        <result property="productNameEn"    column="product_name_en"    />
+        <result property="purchaseDate"    column="purchase_date"    />
         <result property="material"    column="material"    />
         <result property="amount"    column="amount"    />
         <result property="unit"    column="unit"    />
         <result property="price"    column="price"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="productNameCn"    column="product_name_cn"    />
+        <result property="productNameEn"    column="product_name_en"    />
         <result property="needTime"    column="need_time"    />
         <result property="paidNum"    column="paid_num"    />
         <result property="unpaidNum"    column="unpaid_num"    />
@@ -39,27 +40,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectRfOrderVo">
-        select id, purchase_id, purchase_name, purchase_code, order_num, product_name_cn, product_name_en, material, amount, unit, price, need_time, paid_num, unpaid_num, order_from, order_status, order_status_desc, product_pic, send_time1, send_amount1, send_time2, send_amount2, send_time3, send_amount3, send_info, remark, del_flag, create_by, create_time, update_by, update_time from rf_order
+        select id, purchase_id, purchase_name, purchase_code, purchase_date, material, amount, unit, price, order_num, product_name_cn, product_name_en, need_time, paid_num, unpaid_num, order_from, order_status, order_status_desc, product_pic, send_time1, send_amount1, send_time2, send_amount2, send_time3, send_amount3, send_info, remark, del_flag, create_by, create_time, update_by, update_time from rf_order
     </sql>
 
     <select id="selectRfOrderList" parameterType="RfOrder" resultMap="RfOrderResult">
         <include refid="selectRfOrderVo"/>
-        <where>  
+        <where>
+            <if test="purchaseId != null  and purchaseId != ''"> and purchase_id = #{purchaseId}</if>
             <if test="purchaseName != null  and purchaseName != ''"> and purchase_name like concat('%', #{purchaseName}, '%')</if>
+            <if test="purchaseCode != null  and purchaseCode != ''"> and purchase_code = #{purchaseCode}</if>
+            <if test="purchaseDate != null "> and purchase_date = #{purchaseDate}</if>
+            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="price != null "> and price = #{price}</if>
             <if test="orderNum != null  and orderNum != ''"> and order_num like concat('%', #{orderNum}, '%')</if>
             <if test="productNameCn != null  and productNameCn != ''"> and product_name_cn like concat('%', #{productNameCn}, '%')</if>
             <if test="productNameEn != null  and productNameEn != ''"> and product_name_en like concat('%', #{productNameEn}, '%')</if>
-            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
             <if test="params.beginNeedTime != null and params.beginNeedTime != '' and params.endNeedTime != null and params.endNeedTime != ''"> and need_time between #{params.beginNeedTime} and #{params.endNeedTime}</if>
+            <if test="paidNum != null "> and paid_num = #{paidNum}</if>
+            <if test="unpaidNum != null "> and unpaid_num = #{unpaidNum}</if>
+            <if test="orderFrom != null  and orderFrom != ''"> and order_from like concat('%', #{orderFrom}, '%')</if>
             <if test="orderStatus != null  and orderStatus != ''"> and order_status = #{orderStatus}</if>
+            <if test="orderStatusDesc != null  and orderStatusDesc != ''"> and order_status_desc = #{orderStatusDesc}</if>
+            <if test="productPic != null  and productPic != ''"> and product_pic = #{productPic}</if>
+            <if test="params.beginSendTime1 != null and params.beginSendTime1 != '' and params.endSendTime1 != null and params.endSendTime1 != ''"> and send_time1 between #{params.beginSendTime1} and #{params.endSendTime1}</if>
+            <if test="sendAmount1 != null "> and send_amount1 = #{sendAmount1}</if>
+            <if test="sendTime2 != null "> and send_time2 = #{sendTime2}</if>
+            <if test="sendAmount2 != null "> and send_amount2 = #{sendAmount2}</if>
+            <if test="sendTime3 != null "> and send_time3 = #{sendTime3}</if>
+            <if test="sendAmount3 != null "> and send_amount3 = #{sendAmount3}</if>
+            <if test="sendInfo != null  and sendInfo != ''"> and send_info = #{sendInfo}</if>
         </where>
     </select>
-    
-    <select id="selectRfOrderById" parameterType="Long" resultMap="RfOrderResult">
+
+    <select id="selectRfOrderById" parameterType="Integer" resultMap="RfOrderResult">
         <include refid="selectRfOrderVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertRfOrder" parameterType="RfOrder">
         insert into rf_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -67,13 +86,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="purchaseId != null">purchase_id,</if>
             <if test="purchaseName != null">purchase_name,</if>
             <if test="purchaseCode != null">purchase_code,</if>
-            <if test="orderNum != null">order_num,</if>
-            <if test="productNameCn != null">product_name_cn,</if>
-            <if test="productNameEn != null">product_name_en,</if>
+            <if test="purchaseDate != null">purchase_date,</if>
             <if test="material != null">material,</if>
             <if test="amount != null">amount,</if>
             <if test="unit != null">unit,</if>
             <if test="price != null">price,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="productNameCn != null">product_name_cn,</if>
+            <if test="productNameEn != null">product_name_en,</if>
             <if test="needTime != null">need_time,</if>
             <if test="paidNum != null">paid_num,</if>
             <if test="unpaidNum != null">unpaid_num,</if>
@@ -94,19 +114,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="purchaseId != null">#{purchaseId},</if>
             <if test="purchaseName != null">#{purchaseName},</if>
             <if test="purchaseCode != null">#{purchaseCode},</if>
-            <if test="orderNum != null">#{orderNum},</if>
-            <if test="productNameCn != null">#{productNameCn},</if>
-            <if test="productNameEn != null">#{productNameEn},</if>
+            <if test="purchaseDate != null">#{purchaseDate},</if>
             <if test="material != null">#{material},</if>
             <if test="amount != null">#{amount},</if>
             <if test="unit != null">#{unit},</if>
             <if test="price != null">#{price},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="productNameCn != null">#{productNameCn},</if>
+            <if test="productNameEn != null">#{productNameEn},</if>
             <if test="needTime != null">#{needTime},</if>
             <if test="paidNum != null">#{paidNum},</if>
             <if test="unpaidNum != null">#{unpaidNum},</if>
@@ -127,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateRfOrder" parameterType="RfOrder">
@@ -136,13 +157,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
             <if test="purchaseName != null">purchase_name = #{purchaseName},</if>
             <if test="purchaseCode != null">purchase_code = #{purchaseCode},</if>
-            <if test="orderNum != null">order_num = #{orderNum},</if>
-            <if test="productNameCn != null">product_name_cn = #{productNameCn},</if>
-            <if test="productNameEn != null">product_name_en = #{productNameEn},</if>
+            <if test="purchaseDate != null">purchase_date = #{purchaseDate},</if>
             <if test="material != null">material = #{material},</if>
             <if test="amount != null">amount = #{amount},</if>
             <if test="unit != null">unit = #{unit},</if>
             <if test="price != null">price = #{price},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="productNameCn != null">product_name_cn = #{productNameCn},</if>
+            <if test="productNameEn != null">product_name_en = #{productNameEn},</if>
             <if test="needTime != null">need_time = #{needTime},</if>
             <if test="paidNum != null">paid_num = #{paidNum},</if>
             <if test="unpaidNum != null">unpaid_num = #{unpaidNum},</if>
@@ -167,12 +189,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteRfOrderById" parameterType="Long">
+    <delete id="deleteRfOrderById" parameterType="Integer">
         delete from rf_order where id = #{id}
     </delete>
 
     <delete id="deleteRfOrderByIds" parameterType="String">
-        delete from rf_order where id in 
+        delete from rf_order where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

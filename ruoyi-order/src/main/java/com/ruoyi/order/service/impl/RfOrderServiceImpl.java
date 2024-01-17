@@ -13,31 +13,31 @@ import com.ruoyi.common.core.text.Convert;
 
 /**
  * 采购订单Service业务层处理
- * 
+ *
  * @author pg
  * @date 2024-01-13
  */
 @Service
-public class RfOrderServiceImpl implements IRfOrderService 
+public class RfOrderServiceImpl implements IRfOrderService
 {
     @Autowired
     private RfOrderMapper rfOrderMapper;
 
     /**
      * 查询采购订单
-     * 
+     *
      * @param id 采购订单主键
      * @return 采购订单
      */
     @Override
-    public RfOrder selectRfOrderById(Long id)
+    public RfOrder selectRfOrderById(Integer id)
     {
         return rfOrderMapper.selectRfOrderById(id);
     }
 
     /**
      * 查询采购订单列表
-     * 
+     *
      * @param rfOrder 采购订单
      * @return 采购订单
      */
@@ -49,7 +49,7 @@ public class RfOrderServiceImpl implements IRfOrderService
 
     /**
      * 新增采购订单
-     * 
+     *
      * @param rfOrder 采购订单
      * @return 结果
      */
@@ -68,7 +68,7 @@ public class RfOrderServiceImpl implements IRfOrderService
 
     /**
      * 修改采购订单
-     * 
+     *
      * @param rfOrder 采购订单
      * @return 结果
      */
@@ -81,7 +81,7 @@ public class RfOrderServiceImpl implements IRfOrderService
 
     /**
      * 批量删除采购订单
-     * 
+     *
      * @param ids 需要删除的采购订单主键
      * @return 结果
      */
@@ -93,12 +93,12 @@ public class RfOrderServiceImpl implements IRfOrderService
 
     /**
      * 删除采购订单信息
-     * 
+     *
      * @param id 采购订单主键
      * @return 结果
      */
     @Override
-    public int deleteRfOrderById(Long id)
+    public int deleteRfOrderById(Integer id)
     {
         return rfOrderMapper.deleteRfOrderById(id);
     }

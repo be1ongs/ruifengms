@@ -94,7 +94,7 @@ public class RfOrderController extends BaseController
      */
     @RequiresPermissions("order:orderinfo:edit")
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    public String edit(@PathVariable("id") Integer id, ModelMap mmap)
     {
         RfOrder rfOrder = rfOrderService.selectRfOrderById(id);
         mmap.put("rfOrder", rfOrder);

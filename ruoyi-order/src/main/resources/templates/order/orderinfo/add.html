@@ -9,7 +9,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-orderinfo-add">
         <div class="form-group">
-            <label class="col-sm-3 control-label">客户名称测试：</label>
+            <label class="col-sm-3 control-label">客户名称：</label>
             <div class="col-sm-8">
                 <select name="purchaseId" class="form-control m-b" th:with="type=${@customer.list()}">
                     <option th:each="dict : ${type}" th:text="${dict.customerName}"
@@ -18,6 +18,15 @@
                             th:data-customer-code="${dict.customerCode}"> >
                     </option>
                 </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">采购日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="purchaseDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
             </div>
         </div>
 
@@ -237,6 +246,11 @@
             $.operate.save(prefix + "/add", formData);
         }
     }
+    $("input[name='purchaseDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
     $("input[name='needTime']").datetimepicker({
         format: "yyyy-mm-dd",

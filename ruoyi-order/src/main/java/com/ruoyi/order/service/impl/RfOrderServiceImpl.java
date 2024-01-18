@@ -75,6 +75,14 @@ public class RfOrderServiceImpl implements IRfOrderService
     @Override
     public int updateRfOrder(RfOrder rfOrder)
     {
+        if (rfOrder.getAmount() > (rfOrder.getUnpaidNum() + rfOrder.getPaidNum())){
+            rfOrder.setUnpaidNum(rfOrder.getAmount()-  rfOrder.getPaidNum());
+        }
+        else{
+            rfOrder.setUnpaidNum(null);
+            rfOrder.setPaidNum(null);
+        }
+        rfOrder.setUpdateBy(ShiroUtils.getLoginName());
         rfOrder.setUpdateTime(DateUtils.getNowDate());
         return rfOrderMapper.updateRfOrder(rfOrder);
     }

@@ -4524,7 +4524,7 @@
         },
         _slugDefault: function (text) {
             // noinspection RegExpRedundantEscape
-            return $h.isEmpty(text, true) ? '' : String(text).replace(/[\[\]\/\{}:;#%=\(\)\*\+\?\\\^\$\|<>&"']/g, '_');
+            return $h.isEmpty(text, true) ? '' : String(text).replace(/[\[\]\/\{}:;,#%=\(\)\*\+\?\\\^\$\|<>&"']/g, '_');
         },
         _updateFileDetails: function (numFiles) {
             var self = this, $el = self.$element, label, n, log, nFiles, file,

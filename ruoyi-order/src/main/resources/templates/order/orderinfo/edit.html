@@ -1,220 +1,223 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改采购订单')" />
-    <th:block th:include="include :: datetimepicker-css" />
-    <th:block th:include="include :: bootstrap-fileinput-css" />
+    <th:block th:include="include :: header('修改采购订单')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-orderinfo-edit" th:object="${rfOrder}">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-orderinfo-edit" th:object="${rfOrder}">
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">客户名称：</label>
-                <div class="col-sm-8">
-                    <select name="purchaseId" class="form-control m-b" th:with="type=${@customer.list()}">
-                        <option th:each="dict : ${type}" th:text="${dict.customerName}"
-                                th:value="${dict.customerId}"
-                                th:data-customer-name="${dict.customerName}"
-                                th:data-customer-code="${dict.customerCode}" th:selected="${dict.customerId} eq *{purchaseId}">
-                        </option>
-                    </select>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户名称：</label>
+            <div class="col-sm-8">
+                <select name="purchaseId" class="form-control m-b" th:with="type=${@customer.list()}">
+                    <option th:each="dict : ${type}" th:text="${dict.customerName}"
+                            th:value="${dict.customerId}"
+                            th:data-customer-name="${dict.customerName}"
+                            th:data-customer-code="${dict.customerCode}"
+                            th:selected="${dict.customerId} eq *{purchaseId}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">采购日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="purchaseDate" th:value="${#dates.format(rfOrder.purchaseDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">采购日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="purchaseDate" th:value="${#dates.format(rfOrder.purchaseDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
+        </div>
+
+
+        <input name="id" th:field="*{id}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">采购单号：</label>
+            <div class="col-sm-8">
+                <input name="orderNum" th:field="*{orderNum}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">产品名称：</label>
+            <div class="col-sm-8">
+                <input name="productNameCn" th:field="*{productNameCn}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">规格型号：</label>
+            <div class="col-sm-8">
+                <input name="productNameEn" th:field="*{productNameEn}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">材质：</label>
+            <div class="col-sm-8">
+                <input name="material" th:field="*{material}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">数量：</label>
+            <div class="col-sm-8">
+                <input type="hidden" name="paidNum" th:field="*{paidNum}" class="form-control" >
+                <input type="hidden" name="unpaidNum" th:field="*{unpaidNum}" class="form-control">
+                <input name="amount" th:field="*{amount}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">单位：</label>
+            <div class="col-sm-8">
+
+                <select name="unit" class="form-control m-b">
+                    <option th:selected="'件' eq *{unit}">件</option>
+                    <option th:selected="'套' eq *{unit}">套</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">单价：</label>
+            <div class="col-sm-8">
+                <input name="price" th:field="*{price}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">交货日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="needTime" th:value="${#dates.format(rfOrder.needTime, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
+        </div>
 
 
+        <div class="form-group">
+            <label class="col-sm-3 control-label">请购：</label>
+            <div class="col-sm-8">
+                <input name="orderFrom" th:field="*{orderFrom}" class="form-control" type="text">
+            </div>
+        </div>
 
-            <input name="id" th:field="*{id}" type="hidden">
-
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">采购单号：</label>
-                <div class="col-sm-8">
-                    <input name="orderNum" th:field="*{orderNum}" class="form-control" type="text">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">上传图纸</label>
+            <!--<div class="col-sm-8">-->
+            <!--<input name="productPic" class="form-control" type="text">-->
+            <!--</div>-->
+            <!-- 添加隐藏的输入字段来存储文件路径 -->
+            <!--                <input type="hidden" id="productPic" name="productPic"/>-->
+            <input type="hidden" id="productPic" name="productPic" th:value="*{productPic}"/>
+            <div class="col-sm-8">
+                <label class="font-noraml">多文件上传</label>
+                <div class="file-loading">
+                    <input id="multipleFile" name="files" type="file" multiple>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品名称：</label>
-                <div class="col-sm-8">
-                    <input name="productNameCn" th:field="*{productNameCn}" class="form-control" type="text">
-                </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remark" th:field="*{remark}" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">规格型号：</label>
-                <div class="col-sm-8">
-                    <input name="productNameEn" th:field="*{productNameEn}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">材质：</label>
-                <div class="col-sm-8">
-                    <input name="material" th:field="*{material}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">数量：</label>
-                <div class="col-sm-8">
-                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
-                </div>
-            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "order/orderinfo";
+    $("#form-orderinfo-edit").validate({
+        focusCleanup: true
+    });
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">单位：</label>
-                <div class="col-sm-8">
+    var uploadedFiles = [];
+    var productPicInput = document.getElementById('productPic');
+    uploadedFiles = productPicInput.value.split(',');
 
-                    <select name="unit" class="form-control m-b">
-                        <option th:selected="'件' eq *{unit}">件</option>
-                        <option th:selected="'套' eq *{unit}">套</option>
-                    </select>
-
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">单价：</label>
-                <div class="col-sm-8">
-                    <input name="price" th:field="*{price}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">交货日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="needTime" th:value="${#dates.format(rfOrder.needTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
+    // 初始化文件上传组件
+    $('#multipleFile').fileinput({
+        uploadUrl: ctx + 'common/uploads',
+        uploadAsync: false,
+        // 初始化时显示已上传的文件
+        initialPreview: uploadedFiles,
+        initialPreviewAsData: true,
+        initialPreviewFileType: 'any', // 允许任何文件类型
+        initialPreviewConfig: uploadedFiles.map(function (file) {
+            var fileType = file.endsWith('.pdf') ? 'pdf' : 'image'; // 根据文件扩展名判断文件类型
+            return {type: fileType, caption: file, key: 1, showDelete: false};
+        })
 
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">请购：</label>
-                <div class="col-sm-8">
-                    <input name="orderFrom" th:field="*{orderFrom}" class="form-control" type="text">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">上传图纸</label>
-                <!--<div class="col-sm-8">-->
-                <!--<input name="productPic" class="form-control" type="text">-->
-                <!--</div>-->
-                <!-- 添加隐藏的输入字段来存储文件路径 -->
-<!--                <input type="hidden" id="productPic" name="productPic"/>-->
-                <input type="hidden" id="productPic" name="productPic" th:value="*{productPic}"/>
-                <div class="col-sm-8">
-                    <label class="font-noraml">多文件上传</label>
-                    <div class="file-loading">
-                        <input id="multipleFile" name="files" type="file" multiple>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备注：</label>
-                <div class="col-sm-8">
-                    <input name="remark" th:field="*{remark}" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <th:block th:include="include :: bootstrap-fileinput-js" />
-    <script th:inline="javascript">
-        var prefix = ctx + "order/orderinfo";
-        $("#form-orderinfo-edit").validate({
-            focusCleanup: true
-        });
-
-        var uploadedFiles = [];
-        var productPicInput = document.getElementById('productPic');
-        uploadedFiles= productPicInput.value.split(',');
-
-        // 初始化文件上传组件
-        $('#multipleFile').fileinput({
-
-            // 初始化时显示已上传的文件
-            initialPreview:  uploadedFiles,
-            initialPreviewAsData: true,
-        });
+    }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
+        var rsp = data.response;
+        log.info("return urls：" + rsp.urls);
+        var productPic = document.getElementById("productPic");
+        productPic.value = rsp.urls.split(','); // 使用数组格式赋值给隐藏字段
+        log.info("return fileNames：" + rsp.fileNames);
+        log.info("return newFileNames：" + rsp.newFileNames);
+        log.info("return originalFilenames：" + rsp.originalFilenames);
+    }).on('fileremoved', function (event, id, index) {
+        $("input[name='" + event.currentTarget.id + "']").val('');
+    });
 
 
-        $(document).ready(function () {
+    function submitHandler() {
+        if ($.validate.form()) {
+            var selectedOption = document.querySelector('select[name="purchaseId"] option:checked');
+            var customerName = selectedOption.getAttribute('data-customer-name');
+            var customerCode = selectedOption.getAttribute('data-customer-code');
 
-            // 多图上传
-            $("#multipleFile").fileinput({
-                uploadUrl: ctx + 'common/uploads',
-                uploadAsync: false
-            }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
-                var rsp = data.response;
-                log.info("return urls：" + rsp.urls)
-                var productPic = document.getElementById("productPic");
-                productPic.value = rsp.urls; // 将文件路径赋值给隐藏字段
-                log.info("reutrn fileNames：" + rsp.fileNames)
-                log.info("reutrn newFileNames：" + rsp.newFileNames)
-                log.info("return originalFilenames：" + rsp.originalFilenames)
-            }).on('fileremoved', function (event, id, index) {
-                $("input[name='" + event.currentTarget.id + "']").val('')
-            })
-        });
+            // 创建一个新的表单数据对象，包含表单字段和从选项中获取的额外数据
+            var formData = $('#form-orderinfo-edit').serializeArray().reduce(function (obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                var selectedOption = document.querySelector('select[name="purchaseId"] option:checked');
-                var customerName = selectedOption.getAttribute('data-customer-name');
-                var customerCode = selectedOption.getAttribute('data-customer-code');
-
-                // 创建一个新的表单数据对象，包含表单字段和从选项中获取的额外数据
-                var formData = $('#form-orderinfo-edit').serializeArray().reduce(function(obj, item) {
-                    obj[item.name] = item.value;
-                    return obj;
-                }, {});
-
-                // 添加额外的数据到表单数据对象中
-                formData['purchaseName'] = customerName;
-                formData['purchaseCode'] = customerCode;
-                $.operate.save(prefix + "/edit", formData);
-                //$.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
-            }
+            // 添加额外的数据到表单数据对象中
+            formData['purchaseName'] = customerName;
+            formData['purchaseCode'] = customerCode;
+            $.operate.save(prefix + "/edit", formData);
+            //$.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
         }
+    }
 
-        $("input[name='purchaseDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='purchaseDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='needTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='needTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime1']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='sendTime1']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime2']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='sendTime2']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='sendTime3']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    $("input[name='sendTime3']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
 </body>
 </html>

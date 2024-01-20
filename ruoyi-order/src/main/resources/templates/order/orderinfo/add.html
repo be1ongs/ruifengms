@@ -270,16 +270,13 @@
             // 获取文件数量
             var fileCount = fileInput.files.length;
 
-            // 进行文件数量校验
-            if (fileCount === 0 || productPic.value == "") {
-                // 如果文件数量为0，显示错误信息或者采取其他适当的操作
-                alert('请先上传文件');
-            } else if (fileCount === 0 && productPic.value != ""){
+            if (productPic.value == ""){
+                $.modal.alertError("请上传图纸附件!")
+            }else {
                 // 文件数量符合要求，可以继续提交表单或执行其他操作
                 // 例如，提交表单
                 $.operate.save(prefix + "/add", formData);
             }
-
 
         }
     }

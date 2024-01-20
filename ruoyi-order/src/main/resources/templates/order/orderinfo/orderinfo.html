@@ -3,6 +3,18 @@
 <head>
     <th:block th:include="include :: header('采购订单列表')"/>
 </head>
+
+<style>
+    .layui-layer-content {
+        height: 100% !important;
+    }
+
+    .layui-layer-tabmain,
+    .layui-layer-tabli {
+        height: 100% !important;
+    }
+
+</style>
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
@@ -97,6 +109,8 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "采购订单",
+            sortName:'needTime',
+            sortOrder:'desc',
             columns: [{
                 checkbox: true
             },
@@ -178,6 +192,8 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        //actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="viewPdf(\'' + row.productPic + '\')"><i class="fa fa-edit"></i>查看图纸</a>');
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="viewPdf(\'' + row.productPic + '\')"><i class="fa fa-info"></i>查看图纸</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
@@ -186,6 +202,37 @@
         };
         $.table.init(options);
     });
+
+    /* 查询看Pdf文件 */
+    function viewPdf(url) {
+        var tabs = [];
+        urls =url.split(',');
+
+        // 生成每个 PDF 文件对应的 tab
+        for (var i = 0; i < urls.length; i++) {
+            tabs.push({
+                title: '第'+(i + 1)+'张' +'图纸',
+                content: '<iframe src="' + urls[i] + '" width="100%" height="100%" frameborder="0"></iframe>'
+            });
+        }
+
+        // 使用 layer.tab 展示 PDF 文件
+        layer.tab({
+            area: ['75%', '70%'],
+            tab: tabs,
+            //btn: ['确定', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            fix: false,
+            //不固定
+            maxmin: true,
+        });
+
+        // 打开弹窗，显示 PDF 文件
+        //$.modal.open("查看图纸", url);
+    }
+
+
 </script>
 </body>
 </html>

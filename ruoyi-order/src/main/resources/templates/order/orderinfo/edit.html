@@ -135,7 +135,27 @@
 <script th:inline="javascript">
     var prefix = ctx + "order/orderinfo";
     $("#form-orderinfo-edit").validate({
-        focusCleanup: true
+        rules: {
+            purchaseDate: "required",
+            orderNum: "required",
+            productNameCn: "required",
+            productNameEn: "required",
+            productNameEn: "required",
+            material: "required",
+            needTime: "required",
+
+            amount: {
+                required: true,
+                digits: true
+            },
+            price: {
+                required: true,
+                number: true,
+                min: 0
+            }
+        },
+
+        //focusCleanup: true
     });
 
     var uploadedFiles = [];
@@ -188,6 +208,8 @@
             //$.operate.save(prefix + "/edit", $('#form-orderinfo-edit').serialize());
         }
     }
+
+
 
     $("input[name='purchaseDate']").datetimepicker({
         format: "yyyy-mm-dd",

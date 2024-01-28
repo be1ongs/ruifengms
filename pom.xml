@@ -38,6 +38,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
+                <version>2.5.15</version>
                 <optional>true</optional>
             </dependency>
             <!-- SpringBoot的依赖配置-->
@@ -192,6 +193,7 @@
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruifeng-order</artifactId>
+                <version>${ruoyi.version}</version>
             </dependency>
 
         </dependencies>
@@ -204,7 +206,6 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>ruoyi-order</module>
         <module>ruoyi-order</module>
     </modules>
     <packaging>pom</packaging>

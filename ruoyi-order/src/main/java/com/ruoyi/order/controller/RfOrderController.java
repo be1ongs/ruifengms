@@ -1,15 +1,15 @@
 package com.ruoyi.order.controller;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.order.domain.RfOrder;
@@ -124,4 +124,37 @@ public class RfOrderController extends BaseController
     {
         return toAjax(rfOrderService.deleteRfOrderByIds(ids));
     }
+
+    /**
+     * 生成生产通知单
+     */
+    @GetMapping("/pro_notice_confirm")
+    public String generateProNotice(@RequestParam("ids") String ids)
+    {
+
+        return prefix + "/pro_notice_confirm"; // 返回视图的逻辑名称
+    }
+
+    /**
+     * 生成生产通知单
+     */
+    @PostMapping("/pro_notice_confirm_list")
+    @ResponseBody
+    public TableDataInfo  generateProNoticeList(@RequestParam("ids") String ids)
+    {
+        startPage();  // 此方法配合前端完成自动分页
+        List<RfOrder> list = Lists.newArrayList();
+        if (StringUtils.isNotEmpty(ids)){
+            String[] strings = ids.split(",");
+            Arrays.stream(strings).forEach(s->{
+                RfOrder rfOrder = rfOrderService.selectRfOrderById(Integer.parseInt(s));
+                if (rfOrder!=null){
+                    list.add(rfOrder);
+                }
+
+            });
+        }
+        return getDataTable(list);
+    }
+
 }

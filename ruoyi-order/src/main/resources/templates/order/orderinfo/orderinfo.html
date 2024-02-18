@@ -88,6 +88,9 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="order:orderinfo:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-primary" onclick="checkItem()" shiro:hasPermission="order:orderinfo:pronotice">
+                <i class="fa fa-pronotice"></i> 生产通知单
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -232,6 +235,14 @@
         //$.modal.open("查看图纸", url);
     }
 
+    // 选中数据
+    function checkItem(){
+         var ids = $.table.selectColumns("id");
+        //var data = $("#" + table.options.id).bootstrapTable('getSelections');
+        $.modal.open("生产通知确认", prefix + "/pro_notice_confirm?ids="+ ids);
+
+
+    }
 
 </script>
 </body>

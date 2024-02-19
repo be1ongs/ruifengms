@@ -162,28 +162,97 @@
 
     }
 
-    /*提交 生产通知单*/
-    function submitHandler(index, layero) {
-        var rows = $.table.selectFirstColumns();
-        if (rows.length == 0) {
-            $.modal.alertWarning("请至少选择一条记录");
+    // /*提交 生产通知单*/
+    // function submitHandler(index, layero) {
+    //     var rows = $.table.selectFirstColumns();
+    //     if (rows.length == 0) {
+    //         $.modal.alertWarning("请至少选择一条记录");
+    //
+    //         return;
+    //     }
+    //     var options = {
+    //         width: '100px',
+    //         height: '100px',
+    //         title: '请输入生产通知单名称',
+    //         url: prefix + "/input_pro_notice_name",
+    //         callBack: doSubmit
+    //     };
+    //     $.modal.openOptions(options);
+    //
+    // }
+    //
+    // function doSubmit(index, layero){
+    //     var body = $.modal.getChildFrame(index);
+    //     $.modal.close(index);
+    //     var data = JSON.stringify($("#" + table.options.id).bootstrapTable('getData'));
+    //     $.ajax({
+    //         type: "post",
+    //         url: prefix + "/generate_pro_notice",
+    //         data: data,
+    //         cache: false,
+    //         contentType: false,
+    //         processData: false,
+    //         dataType: 'json',
+    //         success: function(result) {
+    //             if (result == 0) {
+    //                 $.modal.alertSuccess("生产通知单生成成功，请前往打印！")
+    //                 // 需要关闭窗口的url
+    //                 $.modal.close(index);
+    //             } else {
+    //                 $.modal.alertError("生产通知单生成失败！");
+    //             }
+    //         },
+    //         error: function(error) {
+    //             $.modal.alertError("生产通知单生成失败！");
+    //         }
+    //     });
+    // }
 
-            return;
-        }
-        var data = JSON.stringify($("#" + table.options.id).bootstrapTable('getData'));
+    /* 提交生产通知单 */
+    function submitHandler(index, layero) {
+        // 打开子弹窗，用于输入生产通知单名称
+        var options = {
+            width: '100px',
+            height: '100px',
+            title: '请输入生产通知单名称',
+            url: prefix + "/input_pro_notice_name",
+            callBack: function(index, layero) {
+                // 获取子弹窗的输入值
+                var body = $.modal.getChildFrame(index);
+                var name = body.find('#name').val();
+                if (name == "" || name == null){
+                    $.modal.alertError("请填写通知单名称！");
+                    return;
+                }
+                // 执行提交操作
+                doSubmit(name, index);
+            }
+        };
+        $.modal.openOptions(options);
+    }
+
+    /* 执行提交操作 */
+    function doSubmit(name, childIndex) {
+        var data = $("#" + table.options.id).bootstrapTable('getData');
+        var requestData = {
+            name: name,
+            data: data
+        };
         $.ajax({
             type: "post",
             url: prefix + "/generate_pro_notice",
-            data: data,
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
             cache: false,
-            contentType: false,
-            processData: false,
             dataType: 'json',
             success: function(result) {
                 if (result == 0) {
+
+                    // 关闭子弹窗
+                    $.modal.close(childIndex);
+                    // 关闭父弹窗
+                    $.modal.closeAll();
                     $.modal.alertSuccess("生产通知单生成成功，请前往打印！")
-                    // 需要关闭窗口的url
-                    $.modal.close(index);
                 } else {
                     $.modal.alertError("生产通知单生成失败！");
                 }

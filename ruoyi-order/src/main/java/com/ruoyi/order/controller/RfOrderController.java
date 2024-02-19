@@ -3,9 +3,13 @@ package com.ruoyi.order.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.order.domain.ProNoticeRequest;
+import com.ruoyi.order.domain.RfOrderForProNotice;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -135,6 +139,17 @@ public class RfOrderController extends BaseController
         return prefix + "/pro_notice_confirm"; // 返回视图的逻辑名称
     }
 
+
+    /**
+     * 输入生产通知单名称
+     */
+    @GetMapping("/input_pro_notice_name")
+    public String inputProNoticeName()
+    {
+
+        return prefix + "/input_pro_notice_name"; // 返回视图的逻辑名称
+    }
+
     /**
      * 生成生产通知单
      */
@@ -162,9 +177,16 @@ public class RfOrderController extends BaseController
      */
     @PostMapping("/generate_pro_notice")
     @ResponseBody
-    public Integer  generateProNotice(@RequestBody String jsonData)
+    public Integer  generateProNotice(@RequestBody ProNoticeRequest request)
     {
-        System.out.println(jsonData);
+        String name = request.getName();
+        List<RfOrderForProNotice> rfOrderList  = request.getData();
+
+        // 打印请求数据
+        System.out.println("Name: " + name);
+        System.out.println("Data: " + rfOrderList);
         return 0;
     }
+
+
 }

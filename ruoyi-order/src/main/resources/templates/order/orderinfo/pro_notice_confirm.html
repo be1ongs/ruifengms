@@ -246,7 +246,7 @@
             cache: false,
             dataType: 'json',
             success: function(result) {
-                if (result == 0) {
+                if (result.code == 0) {
 
                     // 关闭子弹窗
                     $.modal.close(childIndex);

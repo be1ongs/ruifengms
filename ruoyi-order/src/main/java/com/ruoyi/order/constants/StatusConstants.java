@@ -11,6 +11,15 @@ public class StatusConstants {
      * 订单未完成
      */
     public static final String NOT_FINISH = "1";
+
+    /**
+     * 订单未开始
+     */
+    public static final String NOT_START = "3";
+    /**
+     * 订单进行中
+     */
+    public static final String PRODUCING = "2";
     /**
      * 订单状态 0：已完成  1：未完成
      */

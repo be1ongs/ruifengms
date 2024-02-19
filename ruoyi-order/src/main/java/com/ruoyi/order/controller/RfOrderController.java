@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.order.domain.ProNoticeRequest;
 import com.ruoyi.order.domain.RfOrderForProNotice;
+import com.ruoyi.order.service.IRfProduceNoticeService;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class RfOrderController extends BaseController
 
     @Autowired
     private IRfOrderService rfOrderService;
+    @Autowired
+    private IRfProduceNoticeService iRfProduceNoticeService;
 
     @RequiresPermissions("order:orderinfo:view")
     @GetMapping()
@@ -175,11 +178,11 @@ public class RfOrderController extends BaseController
      */
     @PostMapping("/generate_pro_notice")
     @ResponseBody
-    public Integer  generateProNotice(@RequestBody ProNoticeRequest request)
-    {
+    public Integer  generateProNotice(@RequestBody ProNoticeRequest request) throws Exception {
         String name = request.getName();
         List<RfOrderForProNotice> rfOrderList  = request.getData();
 
+        iRfProduceNoticeService.insertRfProduceNoticeAndDeatail(request);
         // 打印请求数据
         System.out.println("Name: " + name);
         System.out.println("Data: " + rfOrderList);

@@ -1,6 +1,9 @@
 package com.ruoyi.order.service;
 
 import java.util.List;
+
+import com.ruoyi.order.domain.ProNoticeRequest;
+import com.ruoyi.order.domain.RfOrderForProNotice;
 import com.ruoyi.order.domain.RfProduceNotice;
 
 /**
@@ -58,4 +61,10 @@ public interface IRfProduceNoticeService
      * @return 结果
      */
     public int deleteRfProduceNoticeById(Long id);
+
+    /**
+     * 新增生产通知单  保存生产通知单主表  及 生产通知单明细  需要增加事务保证一致性
+     *
+     */
+    public int insertRfProduceNoticeAndDeatail(ProNoticeRequest request);
 }

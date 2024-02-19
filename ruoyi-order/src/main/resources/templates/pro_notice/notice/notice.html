@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>生产通知单名称：</label>
+                                <label>名称：</label>
                                 <input type="text" name="produceNoticeName"/>
                             </li>
                             <li>
@@ -32,9 +32,6 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pro_notice:notice:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pro_notice:notice:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
@@ -52,6 +49,7 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
+        var orderStatusDatas = [[${@dict.getType('status')}]];
         var editFlag = [[${@permission.hasPermi('pro_notice:notice:edit')}]];
         var removeFlag = [[${@permission.hasPermi('pro_notice:notice:remove')}]];
         var prefix = ctx + "pro_notice/notice";
@@ -74,11 +72,11 @@
                 },
                 {
                     field: 'produceNoticeName',
-                    title: '生产通知单名称'
+                    title: '通知单名称'
                 },
                 {
                     field: 'produceNum',
-                    title: '关联订单数量'
+                    title: '在做订单数'
                 },
                 {
                     field: 'startTime',
@@ -90,7 +88,10 @@
                 },
                 {
                     field: 'status',
-                    title: '完成状态:0 已完成,1 未完成 2进行中'
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatusDatas, value);
+                    }
                 },
                 {
                     field: 'createBy',

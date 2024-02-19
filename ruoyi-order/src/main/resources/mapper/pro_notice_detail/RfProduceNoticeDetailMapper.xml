@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.RfProduceNoticeDetailMapper">
+    
+    <resultMap type="RfProduceNoticeDetail" id="RfProduceNoticeDetailResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="produceNoticeId"    column="produce_notice_id"    />
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="purchaseName"    column="purchase_name"    />
+        <result property="purchaseCode"    column="purchase_code"    />
+        <result property="productNameCn"    column="product_name_cn"    />
+        <result property="productNameEn"    column="product_name_en"    />
+        <result property="material"    column="material"    />
+        <result property="noticeAmount"    column="notice_amount"    />
+        <result property="materialStandards"    column="material_standards"    />
+        <result property="materialWeight"    column="material_weight"    />
+        <result property="productWeight"    column="product_weight"    />
+        <result property="finishAmount"    column="finish_amount"    />
+        <result property="produceAmount"    column="produce_amount"    />
+        <result property="productPic"    column="product_pic"    />
+        <result property="needTime"    column="need_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRfProduceNoticeDetailVo">
+        select id, order_id, order_num, produce_notice_id, purchase_id, purchase_name, purchase_code, product_name_cn, product_name_en, material, notice_amount, material_standards, material_weight, product_weight, finish_amount, produce_amount, product_pic, need_time, start_time, end_time, status, del_flag, create_by, create_time, update_by, update_time, remark from rf_produce_notice_detail
+    </sql>
+
+    <select id="selectRfProduceNoticeDetailList" parameterType="RfProduceNoticeDetail" resultMap="RfProduceNoticeDetailResult">
+        <include refid="selectRfProduceNoticeDetailVo"/>
+        <where>  
+            <if test="orderNum != null  and orderNum != ''"> and order_num = #{orderNum}</if>
+            <if test="purchaseCode != null  and purchaseCode != ''"> and purchase_code like concat('%', #{purchaseCode}, '%')</if>
+            <if test="productNameCn != null  and productNameCn != ''"> and product_name_cn like concat('%', #{productNameCn}, '%')</if>
+            <if test="productNameEn != null  and productNameEn != ''"> and product_name_en like concat('%', #{productNameEn}, '%')</if>
+            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
+            <if test="materialStandards != null  and materialStandards != ''"> and material_standards like concat('%', #{materialStandards}, '%')</if>
+            <if test="params.beginNeedTime != null and params.beginNeedTime != '' and params.endNeedTime != null and params.endNeedTime != ''"> and need_time between #{params.beginNeedTime} and #{params.endNeedTime}</if>
+            <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
+            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectRfProduceNoticeDetailById" parameterType="Long" resultMap="RfProduceNoticeDetailResult">
+        <include refid="selectRfProduceNoticeDetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRfProduceNoticeDetail" parameterType="RfProduceNoticeDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into rf_produce_notice_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="produceNoticeId != null">produce_notice_id,</if>
+            <if test="purchaseId != null">purchase_id,</if>
+            <if test="purchaseName != null">purchase_name,</if>
+            <if test="purchaseCode != null">purchase_code,</if>
+            <if test="productNameCn != null">product_name_cn,</if>
+            <if test="productNameEn != null">product_name_en,</if>
+            <if test="material != null">material,</if>
+            <if test="noticeAmount != null">notice_amount,</if>
+            <if test="materialStandards != null">material_standards,</if>
+            <if test="materialWeight != null">material_weight,</if>
+            <if test="productWeight != null">product_weight,</if>
+            <if test="finishAmount != null">finish_amount,</if>
+            <if test="produceAmount != null">produce_amount,</if>
+            <if test="productPic != null">product_pic,</if>
+            <if test="needTime != null">need_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="produceNoticeId != null">#{produceNoticeId},</if>
+            <if test="purchaseId != null">#{purchaseId},</if>
+            <if test="purchaseName != null">#{purchaseName},</if>
+            <if test="purchaseCode != null">#{purchaseCode},</if>
+            <if test="productNameCn != null">#{productNameCn},</if>
+            <if test="productNameEn != null">#{productNameEn},</if>
+            <if test="material != null">#{material},</if>
+            <if test="noticeAmount != null">#{noticeAmount},</if>
+            <if test="materialStandards != null">#{materialStandards},</if>
+            <if test="materialWeight != null">#{materialWeight},</if>
+            <if test="productWeight != null">#{productWeight},</if>
+            <if test="finishAmount != null">#{finishAmount},</if>
+            <if test="produceAmount != null">#{produceAmount},</if>
+            <if test="productPic != null">#{productPic},</if>
+            <if test="needTime != null">#{needTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRfProduceNoticeDetail" parameterType="RfProduceNoticeDetail">
+        update rf_produce_notice_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="produceNoticeId != null">produce_notice_id = #{produceNoticeId},</if>
+            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
+            <if test="purchaseName != null">purchase_name = #{purchaseName},</if>
+            <if test="purchaseCode != null">purchase_code = #{purchaseCode},</if>
+            <if test="productNameCn != null">product_name_cn = #{productNameCn},</if>
+            <if test="productNameEn != null">product_name_en = #{productNameEn},</if>
+            <if test="material != null">material = #{material},</if>
+            <if test="noticeAmount != null">notice_amount = #{noticeAmount},</if>
+            <if test="materialStandards != null">material_standards = #{materialStandards},</if>
+            <if test="materialWeight != null">material_weight = #{materialWeight},</if>
+            <if test="productWeight != null">product_weight = #{productWeight},</if>
+            <if test="finishAmount != null">finish_amount = #{finishAmount},</if>
+            <if test="produceAmount != null">produce_amount = #{produceAmount},</if>
+            <if test="productPic != null">product_pic = #{productPic},</if>
+            <if test="needTime != null">need_time = #{needTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRfProduceNoticeDetailById" parameterType="Long">
+        delete from rf_produce_notice_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteRfProduceNoticeDetailByIds" parameterType="String">
+        delete from rf_produce_notice_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

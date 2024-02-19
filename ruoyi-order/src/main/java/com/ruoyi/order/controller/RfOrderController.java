@@ -129,7 +129,7 @@ public class RfOrderController extends BaseController
      * 生成生产通知单
      */
     @GetMapping("/pro_notice_confirm")
-    public String generateProNotice(@RequestParam("ids") String ids)
+    public String proNoticeConfirm(@RequestParam("ids") String ids)
     {
 
         return prefix + "/pro_notice_confirm"; // 返回视图的逻辑名称
@@ -140,7 +140,7 @@ public class RfOrderController extends BaseController
      */
     @PostMapping("/pro_notice_confirm_list")
     @ResponseBody
-    public TableDataInfo  generateProNoticeList(@RequestParam("ids") String ids)
+    public TableDataInfo  proNoticeConfirmList(@RequestParam("ids") String ids)
     {
         startPage();  // 此方法配合前端完成自动分页
         List<RfOrder> list = Lists.newArrayList();
@@ -157,4 +157,14 @@ public class RfOrderController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 生成生产通知单
+     */
+    @PostMapping("/generate_pro_notice")
+    @ResponseBody
+    public Integer  generateProNotice(@RequestBody String jsonData)
+    {
+        System.out.println(jsonData);
+        return 0;
+    }
 }

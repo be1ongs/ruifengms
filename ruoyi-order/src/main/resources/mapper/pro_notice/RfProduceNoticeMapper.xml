@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.order.mapper.RfProduceNoticeMapper">
-    
+
     <resultMap type="RfProduceNotice" id="RfProduceNoticeResult">
         <result property="id"    column="id"    />
+        <result property="produceNoticeCode"    column="produce_notice_code"    />
         <result property="produceNoticeName"    column="produce_notice_name"    />
         <result property="produceNum"    column="produce_num"    />
         <result property="startTime"    column="start_time"    />
@@ -20,27 +21,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectRfProduceNoticeVo">
-        select id, produce_notice_name, produce_num, start_time, end_time, status, del_flag, create_by, create_time, update_by, update_time, remark from rf_produce_notice
+        select id, produce_notice_code, produce_notice_name, produce_num, start_time, end_time, status, del_flag, create_by, create_time, update_by, update_time, remark from rf_produce_notice
     </sql>
 
     <select id="selectRfProduceNoticeList" parameterType="RfProduceNotice" resultMap="RfProduceNoticeResult">
         <include refid="selectRfProduceNoticeVo"/>
-        <where>  
+        <where>
+            <if test="produceNoticeCode != null  and produceNoticeCode != ''"> and produce_notice_code = #{produceNoticeCode}</if>
             <if test="produceNoticeName != null  and produceNoticeName != ''"> and produce_notice_name like concat('%', #{produceNoticeName}, '%')</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+            <if test="produceNum != null "> and produce_num = #{produceNum}</if>
             <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
             <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectRfProduceNoticeById" parameterType="Long" resultMap="RfProduceNoticeResult">
         <include refid="selectRfProduceNoticeVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertRfProduceNotice" parameterType="RfProduceNotice" useGeneratedKeys="true" keyProperty="id">
         insert into rf_produce_notice
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="produceNoticeCode != null and produceNoticeCode != ''">produce_notice_code,</if>
             <if test="produceNoticeName != null">produce_notice_name,</if>
             <if test="produceNum != null">produce_num,</if>
             <if test="startTime != null">start_time,</if>
@@ -52,8 +57,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="produceNoticeCode != null and produceNoticeCode != ''">#{produceNoticeCode},</if>
             <if test="produceNoticeName != null">#{produceNoticeName},</if>
             <if test="produceNum != null">#{produceNum},</if>
             <if test="startTime != null">#{startTime},</if>
@@ -65,12 +71,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateRfProduceNotice" parameterType="RfProduceNotice">
         update rf_produce_notice
         <trim prefix="SET" suffixOverrides=",">
+            <if test="produceNoticeCode != null and produceNoticeCode != ''">produce_notice_code = #{produceNoticeCode},</if>
             <if test="produceNoticeName != null">produce_notice_name = #{produceNoticeName},</if>
             <if test="produceNum != null">produce_num = #{produceNum},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
@@ -91,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteRfProduceNoticeByIds" parameterType="String">
-        delete from rf_produce_notice where id in 
+        delete from rf_produce_notice where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

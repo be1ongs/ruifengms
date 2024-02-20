@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('生产通知单明细')"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "pro_notice/notice";
+    var statusDatas = [[${@dict.getType('status')}]];
+    //var prefix = ctx + "demo/table";
+    //var datas = [[${@dict.getType('sys_normal_disable')}]];
+    // 获取 URL 中的参数
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // 获取 ids 参数的值
+    var id = getUrlParameter('id');
+
+    //var dataString = /*[[${rfOrder}]]*/ [];
+    //var dataObject = JSON.parse(dataString);
+    //console.log(ids);
+    $(function () {
+        var options = {
+            url: prefix + "/detailList",
+            queryParams: {id: id},
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: false
+                },
+
+                {
+                    field: 'serialNumber',
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        // index从0开始，如果需要从1开始计数，可以在这里加1
+                        return index + 1;
+                    }
+                },
+
+                {
+                    field: 'purchaseCode',
+                    title: '客户'
+                },
+                {
+                    field: 'orderNum',
+                    title: '订单号'
+                },
+                {
+                    field: 'productNameCn',
+                    title: '产品名称'
+                },
+                {
+                    field: 'productNameEn',
+                    title: '规格型号'
+                },
+                {
+                    field: 'material',
+                    title: '材质'
+                },
+
+                {
+                    field: 'materialStandards',
+                    title: '用料规格'
+                },
+                {
+                    field: 'materialWeight',
+                    title: '毛坯重量'
+                },
+                {
+                    field: 'productWeight',
+                    title: '产品净重'
+                },
+                {
+                    field: 'noticeAmount',
+                    title: '通知生产数量'
+                },
+                {
+                    field: 'finishAmount',
+                    title: '已生产'
+                },
+                {
+                    field: 'produceAmount',
+                    title: '生产中'
+                },
+                {
+                    field: 'needTime',
+                    title: '交货日期'
+                },
+                {
+                    field: 'startTime',
+                    title: '开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '结束时间'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(statusDatas, value);
+                    }
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+    /* 提交生产通知单 */
+    function submitHandler(index, layero) {
+        $.modal.close(index);
+    }
+</script>
+</body>
+</html>

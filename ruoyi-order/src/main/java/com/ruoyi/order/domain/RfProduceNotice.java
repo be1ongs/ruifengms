@@ -9,9 +9,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 生产通知单对象 rf_produce_notice
- * 
+ *
  * @author pg
- * @date 2024-02-19
+ * @date 2024-02-20
  */
 public class RfProduceNotice extends BaseEntity
 {
@@ -19,6 +19,10 @@ public class RfProduceNotice extends BaseEntity
 
     /** 主键 */
     private Long id;
+
+    /** 生产通知单编码 */
+    @Excel(name = "生产通知单编码")
+    private String produceNoticeCode;
 
     /** 生产通知单名称 */
     @Excel(name = "生产通知单名称")
@@ -45,66 +49,75 @@ public class RfProduceNotice extends BaseEntity
     /** 删除标记 0 正常 1 已删除 */
     private String delFlag;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setProduceNoticeName(String produceNoticeName) 
+    public void setProduceNoticeCode(String produceNoticeCode)
+    {
+        this.produceNoticeCode = produceNoticeCode;
+    }
+
+    public String getProduceNoticeCode()
+    {
+        return produceNoticeCode;
+    }
+    public void setProduceNoticeName(String produceNoticeName)
     {
         this.produceNoticeName = produceNoticeName;
     }
 
-    public String getProduceNoticeName() 
+    public String getProduceNoticeName()
     {
         return produceNoticeName;
     }
-    public void setProduceNum(Integer produceNum) 
+    public void setProduceNum(Integer produceNum)
     {
         this.produceNum = produceNum;
     }
 
-    public Integer getProduceNum() 
+    public Integer getProduceNum()
     {
         return produceNum;
     }
-    public void setStartTime(Date startTime) 
+    public void setStartTime(Date startTime)
     {
         this.startTime = startTime;
     }
 
-    public Date getStartTime() 
+    public Date getStartTime()
     {
         return startTime;
     }
-    public void setEndTime(Date endTime) 
+    public void setEndTime(Date endTime)
     {
         this.endTime = endTime;
     }
 
-    public Date getEndTime() 
+    public Date getEndTime()
     {
         return endTime;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setDelFlag(String delFlag) 
+    public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
     }
 
-    public String getDelFlag() 
+    public String getDelFlag()
     {
         return delFlag;
     }
@@ -112,18 +125,19 @@ public class RfProduceNotice extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("produceNoticeName", getProduceNoticeName())
-            .append("produceNum", getProduceNum())
-            .append("startTime", getStartTime())
-            .append("endTime", getEndTime())
-            .append("status", getStatus())
-            .append("delFlag", getDelFlag())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
+                .append("id", getId())
+                .append("produceNoticeCode", getProduceNoticeCode())
+                .append("produceNoticeName", getProduceNoticeName())
+                .append("produceNum", getProduceNum())
+                .append("startTime", getStartTime())
+                .append("endTime", getEndTime())
+                .append("status", getStatus())
+                .append("delFlag", getDelFlag())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }

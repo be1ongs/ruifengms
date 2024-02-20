@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.order.constants.BaseConstants;
 import com.ruoyi.order.domain.ProNoticeRequest;
 import com.ruoyi.order.domain.RfOrderForProNotice;
+import com.ruoyi.order.domain.RfProduceNoticeDetail;
+import com.ruoyi.order.service.IRfProduceNoticeDetailService;
 import com.ruoyi.order.service.IRfProduceNoticeService;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +41,8 @@ public class RfOrderController extends BaseController
     private IRfOrderService rfOrderService;
     @Autowired
     private IRfProduceNoticeService iRfProduceNoticeService;
+    @Autowired
+    private IRfProduceNoticeDetailService iRfProduceNoticeDetailService;
 
     @RequiresPermissions("order:orderinfo:view")
     @GetMapping()
@@ -164,6 +169,8 @@ public class RfOrderController extends BaseController
             String[] strings = ids.split(",");
             Arrays.stream(strings).forEach(s->{
                 RfOrder rfOrder = rfOrderService.selectRfOrderById(Integer.parseInt(s));
+                Integer noticeAmout = calculateTotalNoticeAmount(Integer.parseInt(s));
+                rfOrder.setUnpaidNum(rfOrder.getUnpaidNum() - noticeAmout);
                 if (rfOrder!=null){
                     list.add(rfOrder);
                 }
@@ -173,20 +180,45 @@ public class RfOrderController extends BaseController
         return getDataTable(list);
     }
 
+    // 计算订单对应的生产通知明细的数量总和
+    private int calculateTotalNoticeAmount(int orderId) {
+        int totalNoticeAmount = 0;
+        RfProduceNoticeDetail detail = new RfProduceNoticeDetail();
+        detail.setDelFlag(BaseConstants.DEL_FLAG_NORMAL);
+        detail.setOrderId((long) orderId);
+        List<RfProduceNoticeDetail> rfProduceNoticeDetailList = iRfProduceNoticeDetailService.selectRfProduceNoticeDetailList(detail);
+        for (RfProduceNoticeDetail noticeDetail : rfProduceNoticeDetailList) {
+            totalNoticeAmount += noticeDetail.getNoticeAmount();
+        }
+        return totalNoticeAmount;
+    }
+
     /**
      * 生成生产通知单
      */
     @PostMapping("/generate_pro_notice")
     @ResponseBody
-    public Integer  generateProNotice(@RequestBody ProNoticeRequest request) throws Exception {
+    @Log(title = "生产通知单", businessType = BusinessType.GENERATE)
+    public AjaxResult  generateProNotice(@RequestBody ProNoticeRequest request) throws Exception {
         String name = request.getName();
         List<RfOrderForProNotice> rfOrderList  = request.getData();
-
-        iRfProduceNoticeService.insertRfProduceNoticeAndDeatail(request);
         // 打印请求数据
         System.out.println("Name: " + name);
         System.out.println("Data: " + rfOrderList);
-        return 0;
+        return toAjax(iRfProduceNoticeService.insertRfProduceNoticeAndDeatail(request));
+
+    }
+
+    /**
+     * 校验勾选上的订单是否全都没有安排完计划了，如果存在已经安排完计划的则提示不让选
+     */
+    @PostMapping("/check_pro_notice_confirm")
+    @ResponseBody
+    public AjaxResult checkProNoticeConfirm(@RequestParam("ids") String ids)
+    {
+        System.out.println(ids);
+        return toAjax(iRfProduceNoticeService.checkProNoticeConfirm(ids));
+
     }
 
 

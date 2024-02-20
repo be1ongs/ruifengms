@@ -1,15 +1,19 @@
 package com.ruoyi.order.controller;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.order.constants.BaseConstants;
+import com.ruoyi.order.domain.RfOrder;
+import com.ruoyi.order.domain.RfProduceNoticeDetail;
+import com.ruoyi.order.service.IRfProduceNoticeDetailService;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.order.domain.RfProduceNotice;
@@ -21,23 +25,24 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 生产通知单Controller
- * 
+ *
  * @author pg
  * @date 2024-02-19
  */
 @Controller
 @RequestMapping("/pro_notice/notice")
-public class RfProduceNoticeController extends BaseController
-{
+public class RfProduceNoticeController extends BaseController {
     private String prefix = "pro_notice/notice";
 
     @Autowired
     private IRfProduceNoticeService rfProduceNoticeService;
 
+    @Autowired
+    private IRfProduceNoticeDetailService rfProduceNoticeDetailService;
+
     @RequiresPermissions("pro_notice:notice:view")
     @GetMapping()
-    public String notice()
-    {
+    public String notice() {
         return prefix + "/notice";
     }
 
@@ -47,8 +52,7 @@ public class RfProduceNoticeController extends BaseController
     @RequiresPermissions("pro_notice:notice:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(RfProduceNotice rfProduceNotice)
-    {
+    public TableDataInfo list(RfProduceNotice rfProduceNotice) {
         startPage();
         List<RfProduceNotice> list = rfProduceNoticeService.selectRfProduceNoticeList(rfProduceNotice);
         return getDataTable(list);
@@ -61,8 +65,7 @@ public class RfProduceNoticeController extends BaseController
     @Log(title = "生产通知单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(RfProduceNotice rfProduceNotice)
-    {
+    public AjaxResult export(RfProduceNotice rfProduceNotice) {
         List<RfProduceNotice> list = rfProduceNoticeService.selectRfProduceNoticeList(rfProduceNotice);
         ExcelUtil<RfProduceNotice> util = new ExcelUtil<RfProduceNotice>(RfProduceNotice.class);
         return util.exportExcel(list, "生产通知单数据");
@@ -72,9 +75,16 @@ public class RfProduceNoticeController extends BaseController
      * 新增生产通知单
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
+    }
+
+    /**
+     * 生产通知单详情
+     */
+    @GetMapping("/detail")
+    public String detail(@RequestParam("id") String id) {
+        return prefix + "/detail";
     }
 
     /**
@@ -84,8 +94,7 @@ public class RfProduceNoticeController extends BaseController
     @Log(title = "生产通知单", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(RfProduceNotice rfProduceNotice)
-    {
+    public AjaxResult addSave(RfProduceNotice rfProduceNotice) {
         return toAjax(rfProduceNoticeService.insertRfProduceNotice(rfProduceNotice));
     }
 
@@ -94,8 +103,7 @@ public class RfProduceNoticeController extends BaseController
      */
     @RequiresPermissions("pro_notice:notice:edit")
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         RfProduceNotice rfProduceNotice = rfProduceNoticeService.selectRfProduceNoticeById(id);
         mmap.put("rfProduceNotice", rfProduceNotice);
         return prefix + "/edit";
@@ -108,9 +116,20 @@ public class RfProduceNoticeController extends BaseController
     @Log(title = "生产通知单", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(RfProduceNotice rfProduceNotice)
-    {
+    public AjaxResult editSave(RfProduceNotice rfProduceNotice) {
         return toAjax(rfProduceNoticeService.updateRfProduceNotice(rfProduceNotice));
+    }
+
+    /**
+     * 撤销生产通知单
+     */
+    @RequiresPermissions("pro_notice:notice:revoke")
+    @Log(title = "生产通知单", businessType = BusinessType.REVOKE)
+    @PostMapping("/revoke")
+    @ResponseBody
+    public AjaxResult revokeProduceNotice(RfProduceNotice rfProduceNotice) {
+
+        return toAjax(rfProduceNoticeService.revokeRfProduceNoticeAndDetail(rfProduceNotice));
     }
 
     /**
@@ -118,10 +137,32 @@ public class RfProduceNoticeController extends BaseController
      */
     @RequiresPermissions("pro_notice:notice:remove")
     @Log(title = "生产通知单", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(rfProduceNoticeService.deleteRfProduceNoticeByIds(ids));
+    }
+
+
+
+    /**
+     * 生成生产通知单
+     */
+    @PostMapping("/detailList")
+    @ResponseBody
+    public TableDataInfo proNoticeDetailList(@RequestParam("id") String id) {
+        startPage();  // 此方法配合前端完成自动分页
+        List<RfProduceNoticeDetail> list = Lists.newArrayList();
+        if (StringUtils.isNotEmpty(id)) {
+            String[] strings = id.split(",");
+
+            String noticeId = strings[0];
+            RfProduceNoticeDetail rfProduceNoticeDetail = new RfProduceNoticeDetail();
+            rfProduceNoticeDetail.setProduceNoticeId(Long.parseLong(noticeId));
+            rfProduceNoticeDetail.setDelFlag(BaseConstants.DEL_FLAG_NORMAL);
+            list = rfProduceNoticeDetailService.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
+
+        }
+        return getDataTable(list);
     }
 }

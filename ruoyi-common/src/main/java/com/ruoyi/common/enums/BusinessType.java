@@ -21,6 +21,14 @@ public enum BusinessType
      * 修改
      */
     UPDATE,
+    /**
+     * 撤销生产通知单
+     */
+    REVOKE,
+    /**
+     * 生成生产通知单
+     */
+    GENERATE,
 
     /**
      * 删除

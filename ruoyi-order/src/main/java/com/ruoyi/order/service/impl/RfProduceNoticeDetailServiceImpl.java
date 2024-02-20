@@ -2,6 +2,7 @@ package com.ruoyi.order.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.order.constants.BaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.RfProduceNoticeDetailMapper;
@@ -42,6 +43,7 @@ public class RfProduceNoticeDetailServiceImpl implements IRfProduceNoticeDetailS
     @Override
     public List<RfProduceNoticeDetail> selectRfProduceNoticeDetailList(RfProduceNoticeDetail rfProduceNoticeDetail)
     {
+        rfProduceNoticeDetail.setDelFlag(BaseConstants.DEL_FLAG_NORMAL);
         return rfProduceNoticeDetailMapper.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
     }
 

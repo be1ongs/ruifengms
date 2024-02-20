@@ -237,7 +237,7 @@
 
     // 选中数据
     function checkItem(){
-         var ids = $.table.selectColumns("id");
+         var ids = $.table.selectColumns("id").join(",");
         //var data = $("#" + table.options.id).bootstrapTable('getSelections');
             table.set();
             var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
@@ -246,9 +246,30 @@
                 return;
             }
             $.modal.confirm("确认是选中的" + rows.length + "条数据需要生成生产通知单吗吗?", function() {
-                $.modal.open("生成生产通知单", prefix + "/pro_notice_confirm?ids="+ ids);
+                //是否包含已全部安排生产的订单，如果包含则提示
+                checkProNoticeConfirm(ids);
             });
+    }
 
+    function checkProNoticeConfirm(ids){
+        // 将ids转换为JSON字符串
+        $.ajax({
+            type: "post",
+            url: prefix + "/check_pro_notice_confirm",
+            data:  { ids: ids },
+            cache: false,
+            dataType: 'json',
+            success: function(result) {
+                if (result.code == 0) {
+                    $.modal.open("生成生产通知单", prefix + "/pro_notice_confirm?ids="+ ids);
+                } else {
+                    $.modal.alertError("存在重复下计划订单，请确认！");
+                }
+            },
+            error: function(error) {
+                $.modal.alertError("生产通知单生成失败！");
+            }
+        });
     }
 
 </script>

@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.order.domain.ProNoticeRequest;
 import com.ruoyi.order.domain.RfOrderForProNotice;
 import com.ruoyi.order.domain.RfProduceNotice;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 生产通知单Service接口
@@ -67,4 +68,18 @@ public interface IRfProduceNoticeService
      *
      */
     public int insertRfProduceNoticeAndDeatail(ProNoticeRequest request);
+
+    /**
+     * 撤销生产通知单及明细数据
+     * @param rfProduceNotice
+     * @return
+     */
+    public int revokeRfProduceNoticeAndDetail(RfProduceNotice rfProduceNotice);
+
+    /**
+     * 校验是否存在重复下计划
+     * @param ids
+     * @return
+     */
+    public int checkProNoticeConfirm(String ids);
 }

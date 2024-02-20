@@ -1,9 +1,16 @@
 package com.ruoyi.order.service.impl;
 
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ExceptionUtil;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.order.constants.BaseConstants;
+import com.ruoyi.order.constants.OrderStatusConstants;
 import com.ruoyi.order.constants.StatusConstants;
+import com.ruoyi.order.domain.CheckAmountAboutOrder;
+import com.ruoyi.order.domain.RfProduceNoticeDetail;
+import com.ruoyi.order.service.IRfProduceNoticeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.RfOrderMapper;
@@ -18,10 +25,12 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2024-01-13
  */
 @Service
-public class RfOrderServiceImpl implements IRfOrderService
-{
+public class RfOrderServiceImpl implements IRfOrderService {
     @Autowired
     private RfOrderMapper rfOrderMapper;
+
+    @Autowired
+    private IRfProduceNoticeDetailService iRfProduceNoticeDetailService;
 
     /**
      * 查询采购订单
@@ -30,8 +39,7 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 采购订单
      */
     @Override
-    public RfOrder selectRfOrderById(Integer id)
-    {
+    public RfOrder selectRfOrderById(Integer id) {
         return rfOrderMapper.selectRfOrderById(id);
     }
 
@@ -42,9 +50,57 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 采购订单
      */
     @Override
-    public List<RfOrder> selectRfOrderList(RfOrder rfOrder)
-    {
-        return rfOrderMapper.selectRfOrderList(rfOrder);
+    public List<RfOrder> selectRfOrderList(RfOrder rfOrder) {
+
+        List<RfOrder> list = rfOrderMapper.selectRfOrderList(rfOrder);
+        list.forEach(e -> {
+            CheckAmountAboutOrder checkAmountAboutOrder = this.calculateTotalNoticeAmount(e.getId());
+            if ((e.getAmount() - checkAmountAboutOrder.getNoticeAmount()) > 0) {
+                if (checkAmountAboutOrder.getProduceAmount() > 0) {
+                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN_AND_PRODUCING);
+                } else {
+                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN);
+                }
+            } else if ((e.getAmount() - checkAmountAboutOrder.getNoticeAmount()) == 0) {
+                if (checkAmountAboutOrder.getProduceAmount() > 0) {
+                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_PRODUCING);
+                } else if ((e.getAmount() - checkAmountAboutOrder.getFinishAmount()) == 0 && e.getUnpaidNum() == checkAmountAboutOrder.getFinishAmount()) {
+                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_SEND);
+                } else if (e.getUnpaidNum() == 0) {
+                    e.setOrderStatus(OrderStatusConstants.FINISH);
+                }else {
+                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PRODUCE);
+                }
+            } else {
+
+            }
+        });
+
+        return list;
+
+    }
+
+    // 查询每个订单的已生产和未生产
+    private CheckAmountAboutOrder calculateTotalNoticeAmount(int orderId) {
+
+        CheckAmountAboutOrder checkAmountAboutOrder = new CheckAmountAboutOrder();
+        checkAmountAboutOrder.setOrderId(orderId);
+        RfProduceNoticeDetail detail = new RfProduceNoticeDetail();
+        detail.setDelFlag(BaseConstants.DEL_FLAG_NORMAL);
+        detail.setOrderId((long) orderId);
+        List<RfProduceNoticeDetail> rfProduceNoticeDetailList = iRfProduceNoticeDetailService.selectRfProduceNoticeDetailList(detail);
+        int totalNoticeAmount = 0;
+        int finishAmount = 0;
+        int produceAmount = 0;
+        for (RfProduceNoticeDetail noticeDetail : rfProduceNoticeDetailList) {
+            totalNoticeAmount += noticeDetail.getNoticeAmount();
+            finishAmount += noticeDetail.getFinishAmount();
+            produceAmount += noticeDetail.getProduceAmount();
+        }
+        checkAmountAboutOrder.setFinishAmount(finishAmount);
+        checkAmountAboutOrder.setNoticeAmount(totalNoticeAmount);
+        checkAmountAboutOrder.setProduceAmount(produceAmount);
+        return checkAmountAboutOrder;
     }
 
     /**
@@ -54,15 +110,14 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 结果
      */
     @Override
-    public int insertRfOrder(RfOrder rfOrder)
-    {
+    public int insertRfOrder(RfOrder rfOrder) {
 
         rfOrder.setCreateTime(DateUtils.getNowDate());
         rfOrder.setCreateBy(ShiroUtils.getLoginName());
         rfOrder.setPaidNum(0);
         rfOrder.setUnpaidNum(rfOrder.getAmount());
-        rfOrder.setOrderStatus(StatusConstants.NOT_FINISH);
-        rfOrder.setOrderStatusDesc(StatusConstants.StatusType.getValueBykey(StatusConstants.NOT_FINISH));
+        rfOrder.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN);
+        //rfOrder.setOrderStatusDesc(StatusConstants.StatusType.getValueBykey(StatusConstants.NOT_FINISH));
         return rfOrderMapper.insertRfOrder(rfOrder);
     }
 
@@ -73,12 +128,10 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 结果
      */
     @Override
-    public int updateRfOrder(RfOrder rfOrder)
-    {
-        if (rfOrder.getAmount() > (rfOrder.getUnpaidNum() + rfOrder.getPaidNum())){
-            rfOrder.setUnpaidNum(rfOrder.getAmount()-  rfOrder.getPaidNum());
-        }
-        else{
+    public int updateRfOrder(RfOrder rfOrder) {
+        if (rfOrder.getAmount() > (rfOrder.getUnpaidNum() + rfOrder.getPaidNum())) {
+            rfOrder.setUnpaidNum(rfOrder.getAmount() - rfOrder.getPaidNum());
+        } else {
             rfOrder.setUnpaidNum(null);
             rfOrder.setPaidNum(null);
         }
@@ -94,8 +147,7 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 结果
      */
     @Override
-    public int deleteRfOrderByIds(String ids)
-    {
+    public int deleteRfOrderByIds(String ids) {
         return rfOrderMapper.deleteRfOrderByIds(Convert.toStrArray(ids));
     }
 
@@ -106,8 +158,7 @@ public class RfOrderServiceImpl implements IRfOrderService
      * @return 结果
      */
     @Override
-    public int deleteRfOrderById(Integer id)
-    {
+    public int deleteRfOrderById(Integer id) {
         return rfOrderMapper.deleteRfOrderById(id);
     }
 }

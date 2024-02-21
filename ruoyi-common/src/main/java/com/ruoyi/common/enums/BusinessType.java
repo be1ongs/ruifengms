@@ -29,7 +29,10 @@ public enum BusinessType
      * 生成生产通知单
      */
     GENERATE,
-
+    /**
+     * 生成生产通知单EXCEL
+     */
+    GENERATE_EXCEL,
     /**
      * 删除
      */

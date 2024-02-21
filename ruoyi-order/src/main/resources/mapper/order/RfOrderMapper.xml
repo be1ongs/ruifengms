@@ -20,6 +20,9 @@
         <result property="needTime"    column="need_time"    />
         <result property="paidNum"    column="paid_num"    />
         <result property="unpaidNum"    column="unpaid_num"    />
+        <result property="finishedProduceAmount"    column="finished_produce_amount"    />
+        <result property="producingAmount"    column="producing_amount"    />
+        <result property="waitPlanAmount"    column="wait_plan_amount"    />
         <result property="orderFrom"    column="order_from"    />
         <result property="orderStatus"    column="order_status"    />
         <result property="orderStatusDesc"    column="order_status_desc"    />
@@ -40,7 +43,7 @@
     </resultMap>
 
     <sql id="selectRfOrderVo">
-        select id, purchase_id, purchase_name, purchase_code, purchase_date, material, amount, unit, price, order_num, product_name_cn, product_name_en, need_time, paid_num, unpaid_num, order_from, order_status, order_status_desc, product_pic, send_time1, send_amount1, send_time2, send_amount2, send_time3, send_amount3, send_info, remark, del_flag, create_by, create_time, update_by, update_time from rf_order
+        select id, purchase_id, purchase_name, purchase_code, purchase_date, material, amount, unit, price, order_num, product_name_cn, product_name_en, need_time, paid_num, unpaid_num, finished_produce_amount, producing_amount, wait_plan_amount, order_from, order_status, order_status_desc, product_pic, send_time1, send_amount1, send_time2, send_amount2, send_time3, send_amount3, send_info, remark, del_flag, create_by, create_time, update_by, update_time from rf_order
     </sql>
 
     <select id="selectRfOrderList" parameterType="RfOrder" resultMap="RfOrderResult">
@@ -60,6 +63,9 @@
             <if test="params.beginNeedTime != null and params.beginNeedTime != '' and params.endNeedTime != null and params.endNeedTime != ''"> and need_time between #{params.beginNeedTime} and #{params.endNeedTime}</if>
             <if test="paidNum != null "> and paid_num = #{paidNum}</if>
             <if test="unpaidNum != null "> and unpaid_num = #{unpaidNum}</if>
+            <if test="finishedProduceAmount != null "> and finished_produce_amount = #{finishedProduceAmount}</if>
+            <if test="producingAmount != null "> and producing_amount = #{producingAmount}</if>
+            <if test="waitPlanAmount != null "> and wait_plan_amount = #{waitPlanAmount}</if>
             <if test="orderFrom != null  and orderFrom != ''"> and order_from like concat('%', #{orderFrom}, '%')</if>
             <if test="orderStatus != null  and orderStatus != ''"> and order_status = #{orderStatus}</if>
             <if test="orderStatusDesc != null  and orderStatusDesc != ''"> and order_status_desc = #{orderStatusDesc}</if>
@@ -97,6 +103,9 @@
             <if test="needTime != null">need_time,</if>
             <if test="paidNum != null">paid_num,</if>
             <if test="unpaidNum != null">unpaid_num,</if>
+            <if test="finishedProduceAmount != null">finished_produce_amount,</if>
+            <if test="producingAmount != null">producing_amount,</if>
+            <if test="waitPlanAmount != null">wait_plan_amount,</if>
             <if test="orderFrom != null">order_from,</if>
             <if test="orderStatus != null">order_status,</if>
             <if test="orderStatusDesc != null">order_status_desc,</if>
@@ -131,6 +140,9 @@
             <if test="needTime != null">#{needTime},</if>
             <if test="paidNum != null">#{paidNum},</if>
             <if test="unpaidNum != null">#{unpaidNum},</if>
+            <if test="finishedProduceAmount != null">#{finishedProduceAmount},</if>
+            <if test="producingAmount != null">#{producingAmount},</if>
+            <if test="waitPlanAmount != null">#{waitPlanAmount},</if>
             <if test="orderFrom != null">#{orderFrom},</if>
             <if test="orderStatus != null">#{orderStatus},</if>
             <if test="orderStatusDesc != null">#{orderStatusDesc},</if>
@@ -168,6 +180,9 @@
             <if test="needTime != null">need_time = #{needTime},</if>
             <if test="paidNum != null">paid_num = #{paidNum},</if>
             <if test="unpaidNum != null">unpaid_num = #{unpaidNum},</if>
+            <if test="finishedProduceAmount != null">finished_produce_amount = #{finishedProduceAmount},</if>
+            <if test="producingAmount != null">producing_amount = #{producingAmount},</if>
+            <if test="waitPlanAmount != null">wait_plan_amount = #{waitPlanAmount},</if>
             <if test="orderFrom != null">order_from = #{orderFrom},</if>
             <if test="orderStatus != null">order_status = #{orderStatus},</if>
             <if test="orderStatusDesc != null">order_status_desc = #{orderStatusDesc},</if>

@@ -133,6 +133,18 @@ public class RfProduceNoticeController extends BaseController {
     }
 
     /**
+     * 生成生产通知单EXCEL
+     */
+    @RequiresPermissions("pro_notice:notice:generate")
+    @Log(title = "生产通知单", businessType = BusinessType.GENERATE_EXCEL)
+    @PostMapping("/generateExcel")
+    @ResponseBody
+    public AjaxResult generateExcel(RfProduceNotice rfProduceNotice) {
+
+        return toAjax(rfProduceNoticeService.generateRfProduceNoticeAndDetailExcel(rfProduceNotice));
+    }
+
+    /**
      * 删除生产通知单
      */
     @RequiresPermissions("pro_notice:notice:remove")

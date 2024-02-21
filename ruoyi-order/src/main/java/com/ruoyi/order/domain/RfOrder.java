@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 采购订单对象 rf_order
  *
  * @author pg
- * @date 2024-01-17
+ * @date 2024-02-21
  */
 public class RfOrder extends BaseEntity
 {
@@ -77,6 +77,18 @@ public class RfOrder extends BaseEntity
     /** 未交 */
     @Excel(name = "未交")
     private Integer unpaidNum;
+
+    /** 已完成 */
+    @Excel(name = "已完成")
+    private Integer finishedProduceAmount;
+
+    /** 生产中 */
+    @Excel(name = "生产中")
+    private Integer producingAmount;
+
+    /** 待计划 */
+    @Excel(name = "待计划")
+    private Integer waitPlanAmount;
 
     /** 请购 */
     @Excel(name = "请购")
@@ -263,6 +275,33 @@ public class RfOrder extends BaseEntity
     {
         return unpaidNum;
     }
+    public void setFinishedProduceAmount(Integer finishedProduceAmount)
+    {
+        this.finishedProduceAmount = finishedProduceAmount;
+    }
+
+    public Integer getFinishedProduceAmount()
+    {
+        return finishedProduceAmount;
+    }
+    public void setProducingAmount(Integer producingAmount)
+    {
+        this.producingAmount = producingAmount;
+    }
+
+    public Integer getProducingAmount()
+    {
+        return producingAmount;
+    }
+    public void setWaitPlanAmount(Integer waitPlanAmount)
+    {
+        this.waitPlanAmount = waitPlanAmount;
+    }
+
+    public Integer getWaitPlanAmount()
+    {
+        return waitPlanAmount;
+    }
     public void setOrderFrom(String orderFrom)
     {
         this.orderFrom = orderFrom;
@@ -390,6 +429,9 @@ public class RfOrder extends BaseEntity
                 .append("needTime", getNeedTime())
                 .append("paidNum", getPaidNum())
                 .append("unpaidNum", getUnpaidNum())
+                .append("finishedProduceAmount", getFinishedProduceAmount())
+                .append("producingAmount", getProducingAmount())
+                .append("waitPlanAmount", getWaitPlanAmount())
                 .append("orderFrom", getOrderFrom())
                 .append("orderStatus", getOrderStatus())
                 .append("orderStatusDesc", getOrderStatusDesc())

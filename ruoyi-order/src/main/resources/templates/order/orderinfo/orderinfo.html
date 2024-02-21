@@ -153,7 +153,8 @@
                 },
                 {
                     field: 'unit',
-                    title: '单位'
+                    title: '单位',
+                    visible: false
                 },
                 {
                     field: 'price',
@@ -164,16 +165,33 @@
                     title: '交货日期'
                 },
                 {
-                    field: 'paidNum',
-                    title: '已交'
+                    field: 'finishedProduceAmount',
+                    title: '已生产',
+                    visible: false
+                },
+                {
+                    field: 'producingAmount',
+                    title: '生产中',
+                    visible: false
+                },
+                {
+                    field: 'waitPlanAmount',
+                    title: '待计划',
+                    visible: false
                 },
                 {
                     field: 'unpaidNum',
                     title: '未交'
                 },
                 {
-                    field: 'orderFrom',
-                    title: '请购'
+                    field: 'produceInfomation',
+                    title: '生产信息',
+                    formatter: function (value, row, index) {
+                        var produceInfo = '已生产：' + row.finishedProduceAmount + '<br>' +
+                            '生产中：' + row.producingAmount + '<br>' +
+                            '未计划：' + row.waitPlanAmount;
+                        return produceInfo;
+                    }
                 },
                 {
                     field: 'orderStatus',
@@ -184,7 +202,8 @@
                 },
                 {
                     field: 'sendInfo',
-                    title: '发货信息'
+                    title: '发货信息',
+                    visible: false
                 },
                 {
                     field: 'remark',

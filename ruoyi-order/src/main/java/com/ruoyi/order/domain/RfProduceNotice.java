@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 生产通知单对象 rf_produce_notice
  *
  * @author pg
- * @date 2024-02-20
+ * @date 2024-02-21
  */
 public class RfProduceNotice extends BaseEntity
 {
@@ -41,6 +41,10 @@ public class RfProduceNotice extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private String xlsAddress;
 
     /** 完成状态:0 已完成,1 未完成 2进行中 */
     @Excel(name = "完成状态:0 已完成,1 未完成 2进行中")
@@ -103,6 +107,15 @@ public class RfProduceNotice extends BaseEntity
     {
         return endTime;
     }
+    public void setXlsAddress(String xlsAddress)
+    {
+        this.xlsAddress = xlsAddress;
+    }
+
+    public String getXlsAddress()
+    {
+        return xlsAddress;
+    }
     public void setStatus(String status)
     {
         this.status = status;
@@ -131,6 +144,7 @@ public class RfProduceNotice extends BaseEntity
                 .append("produceNum", getProduceNum())
                 .append("startTime", getStartTime())
                 .append("endTime", getEndTime())
+                .append("xlsAddress", getXlsAddress())
                 .append("status", getStatus())
                 .append("delFlag", getDelFlag())
                 .append("createBy", getCreateBy())

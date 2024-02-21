@@ -51,34 +51,39 @@ public class RfOrderServiceImpl implements IRfOrderService {
      */
     @Override
     public List<RfOrder> selectRfOrderList(RfOrder rfOrder) {
-
         List<RfOrder> list = rfOrderMapper.selectRfOrderList(rfOrder);
-        list.forEach(e -> {
-            CheckAmountAboutOrder checkAmountAboutOrder = this.calculateTotalNoticeAmount(e.getId());
-            if ((e.getAmount() - checkAmountAboutOrder.getNoticeAmount()) > 0) {
+        list.forEach(order -> {
+            CheckAmountAboutOrder checkAmountAboutOrder = calculateTotalNoticeAmount(order.getId());
+            int remainingAmount = order.getAmount() - checkAmountAboutOrder.getNoticeAmount();
+            if (remainingAmount > 0) {
                 if (checkAmountAboutOrder.getProduceAmount() > 0) {
-                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN_AND_PRODUCING);
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN_AND_PRODUCING);
+                } else if (checkAmountAboutOrder.getProduceAmount() == 0 && checkAmountAboutOrder.getNoticeAmount() == 0) {
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN);
                 } else {
-                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN);
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN_AND_WAIT_PRODUCE);
                 }
-            } else if ((e.getAmount() - checkAmountAboutOrder.getNoticeAmount()) == 0) {
+            } else if (remainingAmount == 0) {
                 if (checkAmountAboutOrder.getProduceAmount() > 0) {
-                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_PRODUCING);
-                } else if ((e.getAmount() - checkAmountAboutOrder.getFinishAmount()) == 0 && e.getUnpaidNum() == checkAmountAboutOrder.getFinishAmount()) {
-                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_SEND);
-                } else if (e.getUnpaidNum() == 0) {
-                    e.setOrderStatus(OrderStatusConstants.FINISH);
-                }else {
-                    e.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PRODUCE);
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_PRODUCING);
+                } else if ((order.getAmount() - checkAmountAboutOrder.getFinishAmount()) == 0 && order.getUnpaidNum() == checkAmountAboutOrder.getFinishAmount()) {
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_SEND);
+                } else if (order.getUnpaidNum() == 0) {
+                    order.setOrderStatus(OrderStatusConstants.FINISH);
+                } else {
+                    order.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PRODUCE);
                 }
-            } else {
-
             }
-        });
+                    order.setFinishedProduceAmount(checkAmountAboutOrder.getFinishAmount());
+                    order.setProducingAmount(checkAmountAboutOrder.getProduceAmount());
+                    order.setWaitPlanAmount(order.getAmount() - checkAmountAboutOrder.getNoticeAmount());
+        }
 
+
+        );
         return list;
-
     }
+
 
     // 查询每个订单的已生产和未生产
     private CheckAmountAboutOrder calculateTotalNoticeAmount(int orderId) {
@@ -116,6 +121,9 @@ public class RfOrderServiceImpl implements IRfOrderService {
         rfOrder.setCreateBy(ShiroUtils.getLoginName());
         rfOrder.setPaidNum(0);
         rfOrder.setUnpaidNum(rfOrder.getAmount());
+//        rfOrder.setFinishedProduceAmount(0);
+//        rfOrder.setProducingAmount(0);
+//        rfOrder.setWaitPlanAmount(rfOrder.getAmount());
         rfOrder.setOrderStatus(OrderStatusConstants.NOT_FINISH_WAIT_PLAN);
         //rfOrder.setOrderStatusDesc(StatusConstants.StatusType.getValueBykey(StatusConstants.NOT_FINISH));
         return rfOrderMapper.insertRfOrder(rfOrder);

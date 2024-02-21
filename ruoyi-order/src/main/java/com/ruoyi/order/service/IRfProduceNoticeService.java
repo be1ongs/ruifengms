@@ -77,6 +77,13 @@ public interface IRfProduceNoticeService
     public int revokeRfProduceNoticeAndDetail(RfProduceNotice rfProduceNotice);
 
     /**
+     * 生成生产通知单及明细数据excel数据
+     * @param rfProduceNotice
+     * @return
+     */
+    public int generateRfProduceNoticeAndDetailExcel(RfProduceNotice rfProduceNotice);
+
+    /**
      * 校验是否存在重复下计划
      * @param ids
      * @return

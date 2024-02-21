@@ -22,7 +22,7 @@ public class OrderStatusConstants {
     public static final String NOT_FINISH_PRODUCING = "3";
 
     /**
-     * 		未完成(待发货)
+     * 	未完成(待发货)
      */
     public static final String NOT_FINISH_WAIT_SEND = "4";
 
@@ -30,5 +30,10 @@ public class OrderStatusConstants {
      *未完成(待生产)
      */
     public static final String NOT_FINISH_WAIT_PRODUCE = "5";
+
+    /**
+     * 未完成(待生产,待计划)
+     */
+    public static final String NOT_FINISH_WAIT_PLAN_AND_WAIT_PRODUCE = "6";
 
 }

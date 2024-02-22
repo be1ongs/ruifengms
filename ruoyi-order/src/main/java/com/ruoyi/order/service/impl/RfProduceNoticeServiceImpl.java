@@ -329,7 +329,7 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
         rfProduceNotice = new RfProduceNotice();
         rfProduceNotice.setId(id);
         // 回填文件地址到 rfProduceNotice 对象中
-        rfProduceNotice.setXlsAddress(fileStoragePath + fileName);
+        rfProduceNotice.setXlsAddress(fileName);
 
         // 更新 rfProduceNotice 对象
         iRfProduceNoticeService.updateRfProduceNotice(rfProduceNotice);

@@ -10,9 +10,9 @@ ruoyi:
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   #生产
-  #profile: /home/ruoyi/uploadPath
+  #profile: /home/ruoyi/excel/tmp
   #本地
-  profile: D:/ruoyi/uploadPath
+  profile: D:/ruoyi/excel/tmp
   # 获取ip地址开关
   addressEnabled: false
 

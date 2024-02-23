@@ -53,6 +53,9 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
     // 注入配置文件中的文件存储路径属性
     @Value("${file.storage.path}")
     private String fileStoragePath;
+    // 注入配置文件中的文件存储路径属性
+    @Value("${file.download.path}")
+    private String fileDownloadPath;
     // 模板文件名称
     private static final String TEMPLATE_FILE_NAME = "tmp.xlsx";
     // 固定行号，从0开始计数
@@ -148,23 +151,19 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
     }
 
     @Override
-    public int generateRfProduceNoticeAndDetailExcel(RfProduceNotice rfProduceNotice) {
-
+    public int generateRfProduceNoticeAndDetailExcel(RfProduceNotice rfProduceNotice) throws Exception {
         rfProduceNotice = iRfProduceNoticeService.selectRfProduceNoticeById(rfProduceNotice.getId());
         // 获取生产通知单详情
         List<RfProduceNoticeDetail> rfProduceNoticeDetailList = getRfProduceNoticeDetailList(rfProduceNotice);
-
         try (FileInputStream fileInputStream = new FileInputStream(new File(fileStoragePath + TEMPLATE_FILE_NAME))) {
             // 使用 WorkbookFactory 创建 Workbook 对象，支持 .xls 和 .xlsx 格式
             Workbook workbook = WorkbookFactory.create(fileInputStream);
-
             // 获取第一个工作表（Sheet）
             Sheet sheet = workbook.getSheetAt(0);
             for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
                 CellRangeAddress mergedRegion = sheet.getMergedRegion(i);
                 int firstRow = mergedRegion.getFirstRow();
                 int firstColumn = mergedRegion.getFirstColumn();
-
                 Row row = sheet.getRow(firstRow);
                 if (row != null) {
                     Cell cell = row.getCell(firstColumn);
@@ -177,22 +176,20 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
             }
             // 处理日期单元格
             processDateCell(sheet);
-
             //处理编号单元格
             processNoCell(sheet,workbook,rfProduceNotice);
             // 从固定行数开始填充数据
             fillData(sheet, rfProduceNoticeDetailList);
-
             // 生成当前时间戳作为文件名的一部分
             String timestamp = String.valueOf(System.currentTimeMillis());
-
-            String fileName = saveExcelAndRfProduceNotice(rfProduceNotice, workbook);
+            String fileName = saveExcelAndRfProduceNotice(rfProduceNotice, rfProduceNoticeDetailList, workbook);
             System.out.println("成功生成Excel文件：" + fileName);
         } catch (IOException e) {
             System.err.println("读取 Excel 模板文件时出错：" + e.getMessage());
             e.printStackTrace();
-        }
+            throw new Exception("读取 Excel 模板文件时出错");
 
+        }
         return rfProduceNoticeDetailList.size();
     }
 
@@ -305,7 +302,7 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
 
     // 保存填充好数据的Excel文件，带文件名参数
     private void saveExcel(Workbook workbook, String fileName) {
-        try (FileOutputStream fileOut = new FileOutputStream(fileStoragePath + fileName)) {
+        try (FileOutputStream fileOut = new FileOutputStream(fileDownloadPath + fileName)) {
             workbook.write(fileOut);
             System.out.println("成功生成Excel文件：" + fileName);
         } catch (IOException e) {
@@ -316,7 +313,7 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public String saveExcelAndRfProduceNotice(RfProduceNotice rfProduceNotice, Workbook workbook) throws IOException {
+    public String saveExcelAndRfProduceNotice(RfProduceNotice rfProduceNotice, List<RfProduceNoticeDetail> rfProduceNoticeDetailList, Workbook workbook) throws IOException {
         // 生成当前时间戳作为文件名的一部分
         String timestamp = String.valueOf(System.currentTimeMillis());
 
@@ -330,9 +327,31 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
         rfProduceNotice.setId(id);
         // 回填文件地址到 rfProduceNotice 对象中
         rfProduceNotice.setXlsAddress(fileName);
+        //设置rfProduceNotice 开始时间 和状态
+        rfProduceNotice.setStartTime(DateUtils.getNowDate());
+        rfProduceNotice.setStatus(StatusConstants.PRODUCING);
+
+        //设置明细表的生产数量和生产中数量
+        int totalNoticeAmount = 0;
+        int finishAmount = 0;
+        int produceAmount = 0;
+        for (RfProduceNoticeDetail noticeDetail : rfProduceNoticeDetailList) {
+            finishAmount += noticeDetail.getFinishAmount();
+            produceAmount += noticeDetail.getProduceAmount();
+            Long noticeDetailId = noticeDetail.getId();
+            noticeDetail = new RfProduceNoticeDetail();
+            noticeDetail.setId(noticeDetailId);
+            noticeDetail.setStartTime(DateUtils.getNowDate());
+            noticeDetail.setStatus(StatusConstants.PRODUCING);
+            noticeDetail.setFinishAmount(finishAmount);
+            noticeDetail.setProduceAmount(produceAmount);
+            iRfProduceNoticeDetailService.updateRfProduceNoticeDetail(noticeDetail);
+        }
+
 
         // 更新 rfProduceNotice 对象
         iRfProduceNoticeService.updateRfProduceNotice(rfProduceNotice);
+
 
         // 事务提交后，更新数据库操作会生效
         return fileName;

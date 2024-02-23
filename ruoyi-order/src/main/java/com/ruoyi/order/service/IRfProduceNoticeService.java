@@ -81,7 +81,7 @@ public interface IRfProduceNoticeService
      * @param rfProduceNotice
      * @return
      */
-    public int generateRfProduceNoticeAndDetailExcel(RfProduceNotice rfProduceNotice);
+    public int generateRfProduceNoticeAndDetailExcel(RfProduceNotice rfProduceNotice) throws Exception;
 
     /**
      * 校验是否存在重复下计划

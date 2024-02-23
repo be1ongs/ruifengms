@@ -139,7 +139,7 @@ public class RfProduceNoticeController extends BaseController {
     @Log(title = "生产通知单", businessType = BusinessType.GENERATE_EXCEL)
     @PostMapping("/generateExcel")
     @ResponseBody
-    public AjaxResult generateExcel(RfProduceNotice rfProduceNotice) {
+    public AjaxResult generateExcel(RfProduceNotice rfProduceNotice) throws Exception{
 
         return toAjax(rfProduceNoticeService.generateRfProduceNoticeAndDetailExcel(rfProduceNotice));
     }

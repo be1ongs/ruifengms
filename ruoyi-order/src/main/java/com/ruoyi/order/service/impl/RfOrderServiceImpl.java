@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ExceptionUtil;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.order.constants.BaseConstants;
 import com.ruoyi.order.constants.OrderStatusConstants;
 import com.ruoyi.order.constants.StatusConstants;
@@ -137,11 +138,13 @@ public class RfOrderServiceImpl implements IRfOrderService {
      */
     @Override
     public int updateRfOrder(RfOrder rfOrder) {
-        if (rfOrder.getAmount() > (rfOrder.getUnpaidNum() + rfOrder.getPaidNum())) {
-            rfOrder.setUnpaidNum(rfOrder.getAmount() - rfOrder.getPaidNum());
-        } else {
-            rfOrder.setUnpaidNum(null);
-            rfOrder.setPaidNum(null);
+        if (!StringUtils.isNotEmpty(rfOrder.getOrderStatus())){
+            if (rfOrder.getAmount() > (rfOrder.getUnpaidNum() + rfOrder.getPaidNum())) {
+                rfOrder.setUnpaidNum(rfOrder.getAmount() - rfOrder.getPaidNum());
+            } else {
+                rfOrder.setUnpaidNum(null);
+                rfOrder.setPaidNum(null);
+            }
         }
         rfOrder.setUpdateBy(ShiroUtils.getLoginName());
         rfOrder.setUpdateTime(DateUtils.getNowDate());

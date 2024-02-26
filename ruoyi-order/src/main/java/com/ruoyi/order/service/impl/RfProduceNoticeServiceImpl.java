@@ -19,6 +19,7 @@ import com.ruoyi.order.constants.StatusConstants;
 import com.ruoyi.order.domain.*;
 import com.ruoyi.order.service.IRfOrderService;
 import com.ruoyi.order.service.IRfProduceNoticeDetailService;
+import com.ruoyi.order.util.StatusUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -320,8 +321,7 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
         // 文件名格式为：output_<timestamp>.xlsx
         String fileName = "output_" + timestamp + ".xlsx";
 
-        // 保存填充好数据的Excel文件
-        saveExcel(workbook, fileName);
+
         Long id = rfProduceNotice.getId();
         rfProduceNotice = new RfProduceNotice();
         rfProduceNotice.setId(id);
@@ -332,27 +332,31 @@ public class RfProduceNoticeServiceImpl implements IRfProduceNoticeService {
         rfProduceNotice.setStatus(StatusConstants.PRODUCING);
 
         //设置明细表的生产数量和生产中数量
-        int totalNoticeAmount = 0;
-        int finishAmount = 0;
-        int produceAmount = 0;
         for (RfProduceNoticeDetail noticeDetail : rfProduceNoticeDetailList) {
-            finishAmount += noticeDetail.getFinishAmount();
-            produceAmount += noticeDetail.getProduceAmount();
             Long noticeDetailId = noticeDetail.getId();
+            Long orderId = noticeDetail.getOrderId();
+            Integer noticeAmount = noticeDetail.getNoticeAmount();
+            Integer finishedAmount = noticeDetail.getFinishAmount();
             noticeDetail = new RfProduceNoticeDetail();
             noticeDetail.setId(noticeDetailId);
             noticeDetail.setStartTime(DateUtils.getNowDate());
             noticeDetail.setStatus(StatusConstants.PRODUCING);
-            noticeDetail.setFinishAmount(finishAmount);
-            noticeDetail.setProduceAmount(produceAmount);
+            noticeDetail.setProduceAmount(noticeAmount - finishedAmount);
             iRfProduceNoticeDetailService.updateRfProduceNoticeDetail(noticeDetail);
+
+            String orderStatus = StatusUtil.calculateOrderStatus(orderId.intValue(),iRfProduceNoticeDetailService,iRfOrderService);
+            RfOrder rf = new RfOrder();
+            rf.setId(orderId.intValue());
+            rf.setOrderStatus(orderStatus);
+            iRfOrderService.updateRfOrder(rf);
         }
 
 
         // 更新 rfProduceNotice 对象
         iRfProduceNoticeService.updateRfProduceNotice(rfProduceNotice);
 
-
+        // 保存填充好数据的Excel文件
+        saveExcel(workbook, fileName);
         // 事务提交后，更新数据库操作会生效
         return fileName;
     }

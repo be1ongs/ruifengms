@@ -1,79 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改生产通知单明细')" />
+    <th:block th:include="include :: header('生产明细录入')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-detail-edit" th:object="${rfProduceNoticeDetail}">
             <input name="id" th:field="*{id}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">订单id：</label>
-                <div class="col-sm-8">
-                    <input name="orderId" th:field="*{orderId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">订单号：</label>
-                <div class="col-sm-8">
-                    <input name="orderNum" th:field="*{orderNum}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">主表id：</label>
-                <div class="col-sm-8">
-                    <input name="produceNoticeId" th:field="*{produceNoticeId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户id：</label>
-                <div class="col-sm-8">
-                    <input name="purchaseId" th:field="*{purchaseId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户名称：</label>
-                <div class="col-sm-8">
-                    <input name="purchaseName" th:field="*{purchaseName}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户代号：</label>
-                <div class="col-sm-8">
-                    <input name="purchaseCode" th:field="*{purchaseCode}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品名称-中文：</label>
-                <div class="col-sm-8">
-                    <input name="productNameCn" th:field="*{productNameCn}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">产品名称-英文：</label>
-                <div class="col-sm-8">
-                    <input name="productNameEn" th:field="*{productNameEn}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">材质：</label>
-                <div class="col-sm-8">
-                    <input name="material" th:field="*{material}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">通知生产数量：</label>
-                <div class="col-sm-8">
-                    <input name="noticeAmount" th:field="*{noticeAmount}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">用料规格：</label>
-                <div class="col-sm-8">
-                    <input name="materialStandards" th:field="*{materialStandards}" class="form-control" type="text">
-                </div>
-            </div>
+
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">毛坯重量：</label>
                 <div class="col-sm-8">
@@ -98,12 +34,7 @@
                     <input name="produceAmount" th:field="*{produceAmount}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">图纸：</label>
-                <div class="col-sm-8">
-                    <textarea name="productPic" class="form-control">[[*{productPic}]]</textarea>
-                </div>
-            </div>
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">交货日期：</label>
                 <div class="col-sm-8">

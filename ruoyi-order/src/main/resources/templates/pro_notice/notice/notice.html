@@ -156,8 +156,13 @@
     }
 
     function downloadExcel(filename) {
-        window.location.href = ctx + "common/download?fileName=" + filename + "&delete=" + false;
+        if ("null" != filename){
+            window.location.href = ctx + "common/download?fileName=" + filename + "&delete=" + false;
+        }else{
+            $.modal.alertError("下载失败，请先生成EXCEL！");
+        }
     }
+
     function noticeDetail(id){
         $.modal.open("通知单明细", prefix + "/detail?id="+ id);
     }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.ProduceNoticeDetailRecordMapper">
+    
+    <resultMap type="ProduceNoticeDetailRecord" id="ProduceNoticeDetailRecordResult">
+        <result property="id"    column="id"    />
+        <result property="produceNoticeDetailId"    column="produce_notice_detail_id"    />
+        <result property="produceTime"    column="produce_time"    />
+        <result property="produceEmployeeId"    column="produce_employee_id"    />
+        <result property="produceEmployee"    column="produce_employee"    />
+        <result property="produceNum"    column="produce_num"    />
+        <result property="produceHalfNum"    column="produce_half_num"    />
+        <result property="produceWasteNum"    column="produce_waste_num"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProduceNoticeDetailRecordVo">
+        select id, produce_notice_detail_id, produce_time, produce_employee_id, produce_employee, produce_num, produce_half_num, produce_waste_num, del_flag, create_by, create_time, update_by, update_time, remark from produce_notice_detail_record
+    </sql>
+
+    <select id="selectProduceNoticeDetailRecordList" parameterType="ProduceNoticeDetailRecord" resultMap="ProduceNoticeDetailRecordResult">
+        <include refid="selectProduceNoticeDetailRecordVo"/>
+        <where>  
+            <if test="produceNoticeDetailId != null "> and produce_notice_detail_id = #{produceNoticeDetailId}</if>
+            <if test="produceTime != null "> and produce_time = #{produceTime}</if>
+            <if test="produceEmployeeId != null  and produceEmployeeId != ''"> and produce_employee_id = #{produceEmployeeId}</if>
+            <if test="produceEmployee != null  and produceEmployee != ''"> and produce_employee = #{produceEmployee}</if>
+            <if test="produceNum != null "> and produce_num = #{produceNum}</if>
+            <if test="produceHalfNum != null "> and produce_half_num = #{produceHalfNum}</if>
+            <if test="produceWasteNum != null "> and produce_waste_num = #{produceWasteNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectProduceNoticeDetailRecordById" parameterType="Long" resultMap="ProduceNoticeDetailRecordResult">
+        <include refid="selectProduceNoticeDetailRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProduceNoticeDetailRecord" parameterType="ProduceNoticeDetailRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into produce_notice_detail_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="produceNoticeDetailId != null">produce_notice_detail_id,</if>
+            <if test="produceTime != null">produce_time,</if>
+            <if test="produceEmployeeId != null">produce_employee_id,</if>
+            <if test="produceEmployee != null">produce_employee,</if>
+            <if test="produceNum != null">produce_num,</if>
+            <if test="produceHalfNum != null">produce_half_num,</if>
+            <if test="produceWasteNum != null">produce_waste_num,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="produceNoticeDetailId != null">#{produceNoticeDetailId},</if>
+            <if test="produceTime != null">#{produceTime},</if>
+            <if test="produceEmployeeId != null">#{produceEmployeeId},</if>
+            <if test="produceEmployee != null">#{produceEmployee},</if>
+            <if test="produceNum != null">#{produceNum},</if>
+            <if test="produceHalfNum != null">#{produceHalfNum},</if>
+            <if test="produceWasteNum != null">#{produceWasteNum},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProduceNoticeDetailRecord" parameterType="ProduceNoticeDetailRecord">
+        update produce_notice_detail_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="produceNoticeDetailId != null">produce_notice_detail_id = #{produceNoticeDetailId},</if>
+            <if test="produceTime != null">produce_time = #{produceTime},</if>
+            <if test="produceEmployeeId != null">produce_employee_id = #{produceEmployeeId},</if>
+            <if test="produceEmployee != null">produce_employee = #{produceEmployee},</if>
+            <if test="produceNum != null">produce_num = #{produceNum},</if>
+            <if test="produceHalfNum != null">produce_half_num = #{produceHalfNum},</if>
+            <if test="produceWasteNum != null">produce_waste_num = #{produceWasteNum},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProduceNoticeDetailRecordById" parameterType="Long">
+        delete from produce_notice_detail_record where id = #{id}
+    </delete>
+
+    <delete id="deleteProduceNoticeDetailRecordByIds" parameterType="String">
+        delete from produce_notice_detail_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

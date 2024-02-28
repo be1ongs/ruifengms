@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('录入生产信息')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="btn-group-sm" id="toolbar" role="group">
+        <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pro_notice_detail_record:record:add">
+            <i class="fa fa-plus"></i> 添加
+        </a>
+        <a id="button-confirm" class="btn btn-danger multiple disabled" onclick="removeRow()">
+            <i class="fa fa-remove"></i> 删除选择行
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "pro_notice_detail_record/record";
+    //var prefix = ctx + "demo/table";
+    //var datas = [[${@dict.getType('sys_normal_disable')}]];
+    //获取 URL 中的参数
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // 获取 id 参数的值
+    var produceNoticeDetailId = getUrlParameter('id');
+
+    console.log(produceNoticeDetailId);
+    $(function() {
+        var options = {
+            url: prefix + "/list/"+produceNoticeDetailId,
+            createUrl: prefix + "/add/" + produceNoticeDetailId,
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "生产通知单明细记录",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'produceNoticeDetailId',
+                    title: '明细表id',
+                    visible: false
+                },
+                {
+                    field: 'produceEmployee',
+                    title: '生产员工'
+                },
+                {
+                    field: 'produceTime',
+                    title: '生产日期'
+                },
+                {
+                    field: 'produceEmployeeId',
+                    title: '生产员工id',
+                    visible: false
+                },
+                {
+                    field: 'produceNum',
+                    title: '生产成品数量'
+                },
+                {
+                    field: 'produceHalfNum',
+                    title: '半成品数量'
+                },
+                {
+                    field: 'produceWasteNum',
+                    title: '废品数量'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 删除指定表格行 */
+    function removeRow() {
+        var ids = $.table.selectColumns("id");
+        //var data = $("#" + table.options.id).bootstrapTable('getSelections');
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认删除" + rows.length + "条数据吗?", function () {
+            $("#" + table.options.id).bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            })
+        });
+
+
+    }
+
+
+
+</script>
+</body>
+</html>

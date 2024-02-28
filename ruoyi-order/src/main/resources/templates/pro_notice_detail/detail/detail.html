@@ -86,7 +86,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('pro_notice_detail:detail:edit')}]];
+    var inputProduceInfoFlag = [[${@permission.hasPermi('pro_notice_detail:detail:inputproduceinfo')}]];
     var removeFlag = [[${@permission.hasPermi('pro_notice_detail:detail:remove')}]];
     var statusDatas = [[${@dict.getType('status')}]];
     var prefix = ctx + "pro_notice_detail/detail";
@@ -181,7 +181,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + inputProduceInfoFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>录入生产信息</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + inputProduceInfoFlag + '" href="javascript:void(0)" onclick="inputProduceInfo(\'' + row.id + '\')"><i class="fa fa-edit"></i>录入生产信息</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
                         return actions.join('');
                     }
@@ -189,6 +189,10 @@
         };
         $.table.init(options);
     });
+
+    function inputProduceInfo(id){
+        $.modal.open("录入生产信息", prefix + "/inputproduceinfo?id="+ id);
+    }
 </script>
 </body>
 </html>

@@ -9,8 +9,9 @@
         <form class="form-horizontal m" id="form-record-add">
             <div class="form-group" hidden>
                 <label class="col-sm-3 control-label">明细表id：</label>
+                <input id="name" placeholder="请输入用户名称" class="form-control" type="text" hidden value="ceshi">
                 <div class="col-sm-8">
-                    <input name="produceNoticeDetailId" class="form-control" type="text">
+                    <input id="produceNoticeDetailId"   name="produceNoticeDetailId" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -20,12 +21,6 @@
                         <input name="produceTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">生产员工id：</label>
-                <div class="col-sm-8">
-                    <input name="produceEmployeeId" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -52,12 +47,6 @@
                     <input name="produceWasteNum" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">删除标记 0 正常 1 已删除：</label>
-                <div class="col-sm-8">
-                    <input name="delFlag" class="form-control" type="text">
-                </div>
-            </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
@@ -69,6 +58,20 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script th:inline="javascript">
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // 获取 id 参数的值
+        var produceNoticeDetailId = getUrlParameter('produceNoticeDetailId');
+
+        console.log(produceNoticeDetailId);
+
+        var produceNoticeDetailIdElement = document.getElementById("produceNoticeDetailId");
+        produceNoticeDetailIdElement.value = produceNoticeDetailId; // 使用数组格式赋值给隐藏字段
         var prefix = ctx + "pro_notice_detail_record/record"
         $("#form-record-add").validate({
             focusCleanup: true
@@ -85,6 +88,7 @@
             minView: "month",
             autoclose: true
         });
+
     </script>
 </body>
 </html>

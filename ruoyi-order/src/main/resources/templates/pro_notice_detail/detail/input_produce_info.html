@@ -4,7 +4,7 @@
     <th:block th:include="include :: header('录入生产信息')"/>
 </head>
 <body class="gray-bg">
-<div class="container-div">
+<div class="container-div" id="test">
     <div class="btn-group-sm" id="toolbar" role="group">
         <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pro_notice_detail_record:record:add">
             <i class="fa fa-plus"></i> 添加
@@ -22,6 +22,8 @@
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "pro_notice_detail_record/record";
+    var editFlag = [[${@permission.hasPermi('pro_notice_detail:detail:inputproduceinfo')}]];
+    var removeFlag = [[${@permission.hasPermi('pro_notice_detail:detail:inputproduceinfo')}]];
     //var prefix = ctx + "demo/table";
     //var datas = [[${@dict.getType('sys_normal_disable')}]];
     //获取 URL 中的参数
@@ -39,7 +41,7 @@
     $(function() {
         var options = {
             url: prefix + "/list/"+produceNoticeDetailId,
-            createUrl: prefix + "/add/" + produceNoticeDetailId,
+            createUrl: prefix + "/add?produceNoticeDetailId=" + produceNoticeDetailId,
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
@@ -119,6 +121,10 @@
 
 
     }
+
+
+
+
 
 
 

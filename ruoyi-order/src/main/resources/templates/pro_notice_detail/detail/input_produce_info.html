@@ -118,11 +118,16 @@
                 values: ids
             })
         });
-
-
     }
+    // function openAdd() {
+    //     $.modal.open("录入生产信息", prefix + "/add?produceNoticeDetailId=" + produceNoticeDetailId, null,null,callback);
+    // }
 
 
+    function  callback(){
+        console.log("刷新的回调函数执行了...")
+        location.reload();
+    }
 
 
 

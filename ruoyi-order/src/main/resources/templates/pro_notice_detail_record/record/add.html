@@ -78,10 +78,19 @@
         });
 
         function submitHandler() {
+            console.log("测试是否执行了~")
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-record-add').serialize());
             }
         }
+
+        // // 刷新父页面B
+        // function refreshParentB() {
+        //     // 关闭当前窗口
+        //     window.close();
+        //     // 刷新父页面B
+        //     window.parent.location.reload();
+        // }
 
         $("input[name='produceTime']").datetimepicker({
             format: "yyyy-mm-dd",

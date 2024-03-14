@@ -860,6 +860,7 @@ var table = {
                     callback = function(index, layero) {
                         var iframeWin = layero.find('iframe')[0];
                         iframeWin.contentWindow.submitHandler(index, layero);
+                        location.reload();
                     }
                 }
                 top.layer.open({
@@ -880,7 +881,8 @@ var table = {
                     },
                     success: function () {
                         $(':focus').blur();
-                    }
+                    },
+                    // end: ()=> location.reload()
                 });
             },
             // 弹出层指定参数选项

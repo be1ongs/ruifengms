@@ -9,9 +9,7 @@
         <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pro_notice_detail_record:record:add">
             <i class="fa fa-plus"></i> 添加
         </a>
-        <a id="button-confirm" class="btn btn-danger multiple disabled" onclick="removeRow()">
-            <i class="fa fa-remove"></i> 删除选择行
-        </a>
+
     </div>
     <div class="row">
         <div class="col-sm-12 select-table table-striped">
@@ -122,7 +120,10 @@
     // function openAdd() {
     //     $.modal.open("录入生产信息", prefix + "/add?produceNoticeDetailId=" + produceNoticeDetailId, null,null,callback);
     // }
-
+    /* 提交生产通知单 */
+    function submitHandler(index, layero) {
+        $.modal.close();
+    }
 
     function  callback(){
         console.log("刷新的回调函数执行了...")

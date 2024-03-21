@@ -44,6 +44,11 @@ public class RfProduceNoticeDetailServiceImpl implements IRfProduceNoticeDetailS
     public List<RfProduceNoticeDetail> selectRfProduceNoticeDetailList(RfProduceNoticeDetail rfProduceNoticeDetail)
     {
         rfProduceNoticeDetail.setDelFlag(BaseConstants.DEL_FLAG_NORMAL);
+        List<RfProduceNoticeDetail> rfProduceNoticeDetailList = rfProduceNoticeDetailMapper.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
+        rfProduceNoticeDetailList.forEach(e->{
+            Long id = e.getId();
+
+        });
         return rfProduceNoticeDetailMapper.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
     }
 

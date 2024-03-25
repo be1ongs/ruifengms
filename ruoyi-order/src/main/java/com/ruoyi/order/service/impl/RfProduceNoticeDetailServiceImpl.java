@@ -3,6 +3,8 @@ package com.ruoyi.order.service.impl;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.constants.BaseConstants;
+import com.ruoyi.order.domain.ProduceNoticeDetailRecord;
+import com.ruoyi.order.service.IProduceNoticeDetailRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.RfProduceNoticeDetailMapper;
@@ -22,6 +24,8 @@ public class RfProduceNoticeDetailServiceImpl implements IRfProduceNoticeDetailS
     @Autowired
     private RfProduceNoticeDetailMapper rfProduceNoticeDetailMapper;
 
+    @Autowired
+    private IProduceNoticeDetailRecordService produceNoticeDetailRecordService;
     /**
      * 查询生产通知单明细
      * 
@@ -47,10 +51,26 @@ public class RfProduceNoticeDetailServiceImpl implements IRfProduceNoticeDetailS
         List<RfProduceNoticeDetail> rfProduceNoticeDetailList = rfProduceNoticeDetailMapper.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
         rfProduceNoticeDetailList.forEach(e->{
             Long id = e.getId();
-
+            ProduceNoticeDetailRecord produceNoticeDetailRecord = new ProduceNoticeDetailRecord();
+            produceNoticeDetailRecord.setProduceNoticeDetailId(id);
+            List<ProduceNoticeDetailRecord> produceNoticeDetailRecordList = produceNoticeDetailRecordService.selectProduceNoticeDetailRecordList(produceNoticeDetailRecord);
+            changeAmountByDetailRecord(e,produceNoticeDetailRecordList);
         });
-        return rfProduceNoticeDetailMapper.selectRfProduceNoticeDetailList(rfProduceNoticeDetail);
+        return rfProduceNoticeDetailList;
     }
+
+    private void changeAmountByDetailRecord(RfProduceNoticeDetail rfProduceNoticeDetail,List<ProduceNoticeDetailRecord> produceNoticeDetailRecordList){
+        Integer allFinishAmount = 0;
+        for (ProduceNoticeDetailRecord detailRecord : produceNoticeDetailRecordList) {
+            allFinishAmount += detailRecord.getProduceNum();
+        }
+        rfProduceNoticeDetail.setFinishAmount(allFinishAmount);
+        rfProduceNoticeDetail.setProduceAmount(rfProduceNoticeDetail.getNoticeAmount() - allFinishAmount <0 ?0:rfProduceNoticeDetail.getNoticeAmount() - allFinishAmount);
+    }
+
+
+
+
 
     /**
      * 新增生产通知单明细

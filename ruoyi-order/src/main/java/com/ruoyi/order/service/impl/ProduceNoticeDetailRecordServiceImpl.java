@@ -55,6 +55,7 @@ public class ProduceNoticeDetailRecordServiceImpl implements IProduceNoticeDetai
     public int insertProduceNoticeDetailRecord(ProduceNoticeDetailRecord produceNoticeDetailRecord)
     {
         produceNoticeDetailRecord.setCreateTime(DateUtils.getNowDate());
+
         return produceNoticeDetailRecordMapper.insertProduceNoticeDetailRecord(produceNoticeDetailRecord);
     }
 

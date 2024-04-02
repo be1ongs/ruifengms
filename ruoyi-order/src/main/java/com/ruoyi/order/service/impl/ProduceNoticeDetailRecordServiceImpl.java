@@ -2,6 +2,8 @@ package com.ruoyi.order.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.order.domain.RfProduceNotice;
+import com.ruoyi.order.domain.RfProduceNoticeDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.ProduceNoticeDetailRecordMapper;
@@ -57,6 +59,10 @@ public class ProduceNoticeDetailRecordServiceImpl implements IProduceNoticeDetai
         produceNoticeDetailRecord.setCreateTime(DateUtils.getNowDate());
 
         return produceNoticeDetailRecordMapper.insertProduceNoticeDetailRecord(produceNoticeDetailRecord);
+    }
+
+    private void changeProduceNoticeDetatilStatus(RfProduceNotice rfProduceNotice, RfProduceNoticeDetail detail){
+
     }
 
     /**
